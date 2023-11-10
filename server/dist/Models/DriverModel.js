@@ -1,17 +1,8 @@
-import {Model, DataTypes} from 'sequelize'
-import { sequelize } from '../config/connection.js'
-
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../config/connection.js';
 class Driver extends Model {
-    public id!: number;
-    public driverFirstName!: string | null;
-    public driverLastName !: string | null;
-    public phoneNumber !: number | null;
-    public password !: string | null;
-
 }
-
-Driver.init(
-   {
+Driver.init({
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -21,7 +12,6 @@ Driver.init(
     driverFirstName: {
         type: DataTypes.STRING,
         allowNull: true,
-
     },
     driverLastName: {
         type: DataTypes.STRING,
@@ -35,14 +25,11 @@ Driver.init(
         type: DataTypes.STRING,
         allowNull: true,
     },
-
-   }, {
+}, {
     sequelize,
     timestamps: false,
     freezeTableName: true,
     underscored: true,
     modelName: 'Driver',
-   }
-)
-
-export {Driver}
+});
+export { Driver };
