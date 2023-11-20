@@ -5,7 +5,7 @@ class Package extends Model {
   public id!: number;
   public driver_id!: number | null;
   public routeNumber!: string | null;
-  public packageName!: string | null;
+  public packageNumber!: string | null;
   public routeDescription!: string | null;
 }
 
@@ -28,7 +28,7 @@ Package.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    packageName: {
+    packageNumber: {
       type: DataTypes.STRING,
       allowNull: false,
     },

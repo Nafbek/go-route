@@ -6,7 +6,7 @@ class RouteBySub extends Model {
   public driver_id!: number;
   public subDriver_id!: number;
   public nameOfReplacedDriver!: string | null;
-  public routeNumber!: any | null;
+  public routeNumber!: any;
   public packageNumber!: any | null;
   public reasonsOfSubstitution!: string | null;
 }

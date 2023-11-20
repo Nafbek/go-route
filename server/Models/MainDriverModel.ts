@@ -6,7 +6,7 @@ class MainDriver extends Model {
   public driverFirstName!: string | null;
   public driverLastName!: string | null;
   public driverContactNumber!: number | null;
-  public password!: string | null;
+  public password!: string;
 }
 
 MainDriver.init(

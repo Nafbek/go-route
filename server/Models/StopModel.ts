@@ -30,6 +30,10 @@ Stop.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    pickDropTime: {
+      type: DataTypes.TIME,
+      allowNull: false,
+    },
     destinationAddress: {
       type: DataTypes.STRING,
       allowNull: true,
