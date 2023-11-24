@@ -52,6 +52,8 @@ RouteBySub.init(
     timestamps: true,
     freezeTableName: true,
     underscored: true,
+    paranoid: true,
+    deletedAt: 'timeRemoved',
     modelName: "routeBySub",
   }
 );

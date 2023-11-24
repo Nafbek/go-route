@@ -3,10 +3,11 @@ import { sequelize } from "../config/connection.js";
 
 class Package extends Model {
   public id!: number;
-  public driver_id!: number | null;
-  public routeNumber!: string | null;
-  public packageNumber!: string | null;
+  public driverId!: number | null;
+  public packageName!: string;
+  public packageNumber!: string;
   public routeDescription!: string | null;
+  public packageDescription!: string | null;
 }
 
 Package.init(
@@ -17,22 +18,27 @@ Package.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    driver_id: {
+    driverId: {
       type: DataTypes.INTEGER,
       references: {
         model: "mainDriver",
         key: "id",
       },
     },
-    routeNumber: {
+
+    districtName: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
+    // routeNumber: {
+    //   type: DataTypes.STRING,
+    //   allowNull: true,
+    // },
     packageNumber: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    routeDescription: {
+    packageDescription: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
@@ -42,6 +48,8 @@ Package.init(
     timestamps: true,
     freezeTableName: true,
     underscored: true,
+    paranoid: true,
+    deletedAt: "timeRemoved",
     modelName: "package",
   }
 );

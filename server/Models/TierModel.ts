@@ -8,6 +8,7 @@ class Tier extends Model {
   public timeEnd!: Date;
   public totalRiders!: number | null;
   public runningDays!: string | null;
+  public totalMiles!: number | null;
 }
 
 Tier.init(
@@ -57,12 +58,23 @@ Tier.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    totalMiles: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+
+    routeDescription: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   },
   {
     sequelize,
     timestamps: true,
     freezeTableName: true,
     underscored: true,
+    paranoid: true,
+    deletedAt: "timeRemoved",
     modelName: "tier",
   }
 );

@@ -3,8 +3,10 @@ import { sequelize } from "../config/connection.js";
 
 class Stop extends Model {
   public id!: number;
-  public stopName!: any | null;
-  public stopAddress!: string | null;
+  public stopName!: string | null;
+  public stopAddress!: string;
+  public pickDropTime_home!: Date;
+  public pickDropTime_school!: Date;
 }
 
 Stop.init(
@@ -30,12 +32,16 @@ Stop.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    pickDropTime: {
+    pickDropTime_home: {
       type: DataTypes.TIME,
       allowNull: false,
     },
     destinationAddress: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    pickDropTime_school: {
+      type: DataTypes.TIME,
       allowNull: true,
     },
   },
@@ -44,6 +50,8 @@ Stop.init(
     timestamps: true,
     freezeTableName: true,
     underscored: true,
+    paranoid: true,
+    deletedAt: 'timeRemoved',
     modelName: "stop",
   }
 );

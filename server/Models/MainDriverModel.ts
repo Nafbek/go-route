@@ -3,9 +3,10 @@ import { sequelize } from "../config/connection.js";
 
 class MainDriver extends Model {
   public id!: number;
-  public driverFirstName!: string | null;
+  public driverFirstName!: string;
   public driverLastName!: string | null;
-  public driverContactNumber!: number | null;
+  public driverContactNumber!: string | null;
+  public driverSecondContactNumber!: string | null;
   public password!: string;
 }
 
@@ -29,6 +30,10 @@ MainDriver.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    driverSecondContactNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -39,6 +44,8 @@ MainDriver.init(
     timestamps: true,
     freezeTableName: true,
     underscored: true,
+    paranoid: true,
+    deletedAt: "timeRemoved",
     modelName: "mainDriver",
   }
 );
