@@ -46,7 +46,7 @@ MainDriver.init(
     underscored: true,
     paranoid: true,
     deletedAt: "timeRemoved",
-    modelName: "mainDriver",
+    modelName: "maindriver",
   }
 );
 

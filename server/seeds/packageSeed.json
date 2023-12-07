@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "driverId": 2,
+        "districName": "Robbinsdale",
+        "packageNumber": "I-98",
+        "packageDescription": "This package is assigned to independent contractor."
+    },
+    {
+        "id": 2,
+        "driverId": 3,
+        "districName": "Robbinsdale",
+        "packageNumber": "I-104",
+        "packageDescription": "This package is assigned to independent contractor."
+    },
+    {
+        "id": 3,
+        "driverId": 1,
+        "districName": "Robbinsdale",
+        "packageNumber": "I-68",
+        "packageDescription": "No description given to this package!"
+    }
+]

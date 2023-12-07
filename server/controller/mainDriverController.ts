@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { MainDriver } from "Models/MainDriverModel.js";
+import { MainDriver } from "../Models/MainDriverModel.js";
 
 //Create driver with complete package
 const createMainDriver = async (req: Request, res: Response) => {
@@ -38,13 +38,16 @@ const findAllDrivers = async (req: Request, res: Response) => {
   try {
     const foundAllDrivers = await MainDriver.findAll({
       include: { all: true, nested: true },
+      logging: console.log,
     });
+    console.log("Drivers found: ", foundAllDrivers);
     if (!foundAllDrivers) {
       res.status(400).json({ message: "Data not found!" });
       return;
     }
     res.status(200).json(foundAllDrivers);
   } catch (error) {
+    console.error("Error in finding all drivers", error);
     res.status(500).json({ message: "Server error." });
   }
 };
@@ -58,7 +61,7 @@ const findSingleMainDriver = async (req: Request, res: Response) => {
           all: true,
           nested: true,
           // where: { id: req.params.driver_id },
-          where: { name: req.body.name },
+          where: { driverFirstName: req.body.driverFirstName },
         },
       ],
     });
@@ -71,20 +74,27 @@ const findSingleMainDriver = async (req: Request, res: Response) => {
   }
 };
 
-
 //Find all drivers by school/anchor
 
-const findAllDriversBySchool = async (req: Request, res: Response)=>{
+const findAllDriversBySchool = async (req: Request, res: Response) => {
   try {
     const foundAllDriversBySchool = await MainDriver.findAndCountAll({
-      include: [{
-      all: true,
-      nested: true,
-      where: req.body.tierAnchor_school
-      }]
-    })
+      include: [
+        {
+          all: true,
+          nested: true,
+          where: req.body.tierAnchor_school,
+        },
+      ],
+    });
+    if (!foundAllDriversBySchool) {
+      res.status(400).json({ message: "Data not found!" });
+    }
+    res.status(200).json(foundAllDriversBySchool);
+  } catch (error) {
+    res.status(500).json({ message: "Server error." });
   }
-}
+};
 
 //Find only list of all drivers with basic personal information
 const findOnlyAllDriversProfile = async (req: Request, res: Response) => {
