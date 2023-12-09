@@ -35,7 +35,7 @@ const createMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, functio
 const findAllDrivers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const foundAllDrivers = yield MainDriver.findAll({
-            // include: { all: true, nested: true },
+            include: { all: true, nested: true },
             logging: console.log,
         });
         console.log("Drivers found: ", foundAllDrivers);
@@ -59,7 +59,7 @@ const findSingleMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, fun
                     all: true,
                     nested: true,
                     // where: { id: req.params.driver_id },
-                    where: { name: req.body.name },
+                    where: { driverFirstName: req.params.driverFirstName },
                 },
             ],
         });
@@ -80,7 +80,7 @@ const findAllDriversBySchool = (req, res) => __awaiter(void 0, void 0, void 0, f
                 {
                     all: true,
                     nested: true,
-                    where: req.body.tierAnchor_school,
+                    where: { tierAnchor_school: req.body.tierAnchor_school },
                 },
             ],
         });
@@ -109,15 +109,56 @@ const findOnlyAllDriversProfile = (req, res) => __awaiter(void 0, void 0, void 0
 const findOnlySingleDriverProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const foundOnlySingleDriverProfile = yield MainDriver.findOne({
-            where: { name: req.body.name },
+            where: { driverFirstName: req.body.driverFirstName },
         });
         if (!foundOnlySingleDriverProfile) {
             res.status(400).json({ message: "Data not found!" });
         }
         res.status(500).json(foundOnlySingleDriverProfile);
     }
-    catch (errr) {
+    catch (error) {
         res.status(500).json({ message: "Server error." });
     }
 });
-export { createMainDriver, findAllDrivers, findAllDriversBySchool, findSingleMainDriver, findOnlyAllDriversProfile, findOnlySingleDriverProfile, };
+const updateDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { driverFirstName, driverLastName, driverContactNumber, driverSecondContactNumber, } = req.body;
+    try {
+        const driverForUpdate = yield MainDriver.findOne({
+            where: { driverFirstName, driverLastName },
+            include: [{ all: true, nested: true }],
+        });
+        if (!driverForUpdate) {
+            return res.status(400).json({ message: "Data not found!" });
+        }
+        yield (driverForUpdate === null || driverForUpdate === void 0 ? void 0 : driverForUpdate.update({
+            driverFirstName,
+            driverLastName,
+            driverContactNumber,
+            driverSecondContactNumber,
+        }));
+        res.status(200).json({ message: "Driver successfully updated." });
+    }
+    catch (error) {
+        console.error("Error occured while updating driver", error);
+        res.status(500).json({ message: "Server error." });
+    }
+});
+const deleteSingleDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, driverFirstName } = req.body;
+    try {
+        const driverForDeletion = yield MainDriver.findOne({
+            where: { id, driverFirstName },
+            include: [{ all: true, nested: true }],
+        });
+        if (!driverForDeletion) {
+            return res.status(400).json({ message: "Data not found!" });
+        }
+        yield driverForDeletion.destroy();
+        res.status(200).json({ message: "Driver successfully removed." });
+    }
+    catch (error) {
+        console.error("Error occured while deleting driver", error);
+        res.status(500).json({ message: "Server error." });
+    }
+});
+export { createMainDriver, findAllDrivers, findAllDriversBySchool, findSingleMainDriver, findOnlyAllDriversProfile, findOnlySingleDriverProfile, updateDriver, deleteSingleDriver, };

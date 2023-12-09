@@ -6,7 +6,7 @@ import { Tier } from "../Models/TierModel.js";
 import fs from "fs";
 
 //Read the data synchronously and parse it
-const driverRawData = fs.readFileSync("./driverSeed.json", "utf-8");
+const driverRawData = fs.readFileSync(".dist/driverSeed.json", "utf-8");
 const driverData = JSON.parse(driverRawData);
 
 //Define an asynchronous function for bulk insertion

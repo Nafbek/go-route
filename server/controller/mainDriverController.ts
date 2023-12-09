@@ -61,7 +61,7 @@ const findSingleMainDriver = async (req: Request, res: Response) => {
           all: true,
           nested: true,
           // where: { id: req.params.driver_id },
-          where: { driverFirstName: req.body.driverFirstName },
+          where: { driverFirstName: req.params.driverFirstName },
         },
       ],
     });
@@ -83,7 +83,7 @@ const findAllDriversBySchool = async (req: Request, res: Response) => {
         {
           all: true,
           nested: true,
-          where: req.body.tierAnchor_school,
+          where: { tierAnchor_school: req.body.tierAnchor_school },
         },
       ],
     });
@@ -113,14 +113,60 @@ const findOnlyAllDriversProfile = async (req: Request, res: Response) => {
 const findOnlySingleDriverProfile = async (req: Request, res: Response) => {
   try {
     const foundOnlySingleDriverProfile = await MainDriver.findOne({
-      where: { name: req.body.name },
+      where: { driverFirstName: req.params.driverFirstName },
     });
 
     if (!foundOnlySingleDriverProfile) {
       res.status(400).json({ message: "Data not found!" });
     }
     res.status(500).json(foundOnlySingleDriverProfile);
-  } catch (errr) {
+  } catch (error) {
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+const updateDriver = async (req: Request, res: Response) => {
+  const {
+    driverFirstName,
+    driverLastName,
+    driverContactNumber,
+    driverSecondContactNumber,
+  } = req.body;
+  try {
+    const driverForUpdate = await MainDriver.findOne({
+      where: { driverFirstName, driverLastName },
+      include: [{ all: true, nested: true }],
+    });
+    if (!driverForUpdate) {
+      return res.status(400).json({ message: "Data not found!" });
+    }
+    await driverForUpdate?.update({
+      driverFirstName,
+      driverLastName,
+      driverContactNumber,
+      driverSecondContactNumber,
+    });
+    res.status(200).json({ message: "Driver successfully updated." });
+  } catch (error) {
+    console.error("Error occured while updating driver", error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+const deleteSingleDriver = async (req: Request, res: Response) => {
+  const { id, driverFirstName } = req.body;
+  try {
+    const driverForDeletion = await MainDriver.findOne({
+      where: { id, driverFirstName },
+      include: [{ all: true, nested: true }],
+    });
+    if (!driverForDeletion) {
+      return res.status(400).json({ message: "Data not found!" });
+    }
+    await driverForDeletion.destroy();
+    res.status(200).json({ message: "Driver successfully removed." });
+  } catch (error) {
+    console.error("Error occured while deleting driver", error);
     res.status(500).json({ message: "Server error." });
   }
 };
@@ -132,4 +178,6 @@ export {
   findSingleMainDriver,
   findOnlyAllDriversProfile,
   findOnlySingleDriverProfile,
+  updateDriver,
+  deleteSingleDriver,
 };

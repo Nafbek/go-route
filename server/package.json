@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --loader ts-node/esm ./node_modules/ts-node/dist/bin.js server.ts",
+    "seed": "node dist/seeds/seed.js",
     "build": "tsc"
   },
   "author": "NK",

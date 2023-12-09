@@ -27,13 +27,18 @@ const createTier = async (req: Request, res: Response) => {
       totalRiders,
       runningDays,
       totalMiles,
-      include: {
-        all: true,
-        nested: true,
-      },
+      // include: {
+      //   all: true,
+      //   nested: true,
+      // },
     });
+
+    if (!createTier) {
+      return res.status(400).json({ message: "Data not found!" });
+    }
     res.status(200).json({ message: "Tier successfully created." });
   } catch (error) {
+    console.error("Error occured while creating tier or route.", error);
     res.status(500).json({ message: "Server error. Try again!" });
   }
 };
@@ -41,14 +46,14 @@ const createTier = async (req: Request, res: Response) => {
 const findTierByTime = async (req: Request, res: Response) => {
   try {
     const foundTierByTime = await Tier.findAll({
-      where: { timeStart: req.body.timeStart },
+      where: { timeStart: req.params.timeStart },
       include: {
         all: true,
         nested: true,
       },
     });
     if (!foundTierByTime) {
-      res.status(400).json({ message: "Data not found!" });
+      return res.status(400).json({ message: "Data not found!" });
     }
     res.status(200).json(foundTierByTime);
   } catch (error) {
@@ -59,14 +64,14 @@ const findTierByTime = async (req: Request, res: Response) => {
 const findTierBySchool = async (req: Request, res: Response) => {
   try {
     const foundTierBySchool = await Tier.findAll({
-      where: { tierAnchor_school: req.body.tierAnchor_school },
+      where: { tierAnchor_school: req.params.tierAnchor_school },
       include: {
         all: true,
         nested: true,
       },
     });
     if (!foundTierBySchool) {
-      res.status(400).json({ message: "Data not found!" });
+      return res.status(400).json({ message: "Data not found!" });
     }
     res.status(200).json(foundTierBySchool);
   } catch (error) {
@@ -74,4 +79,76 @@ const findTierBySchool = async (req: Request, res: Response) => {
   }
 };
 
-export { createTier, findTierBySchool, findTierByTime };
+const updateTier = async (req: Request, res: Response) => {
+  const {
+    tierAnchor_school,
+    schoolContactNumber,
+    package_id,
+    routeNumber,
+    shift,
+    timeStart,
+    timeEnd,
+    totalRiders,
+    runningDays,
+    totalMiles,
+  } = req.body;
+  try {
+    const tierForupdate = await Tier.findOne({
+      where: { tierAnchor_school, routeNumber },
+      include: [{ all: true, nested: true }],
+    });
+
+    if (!tierForupdate) {
+      return res.status(400).json({ message: "Data not found!" });
+    }
+
+    await tierForupdate.update({
+      tierAnchor_school,
+      schoolContactNumber,
+      package_id,
+      routeNumber,
+      shift,
+      timeStart,
+      timeEnd,
+      totalRiders,
+      runningDays,
+      totalMiles,
+    });
+    res.status(200).json({ message: "Route/tier successfully updated." });
+  } catch (error) {
+    console.error("Error occured while updating route/tier.");
+    res.status(500).json({ messge: "Server error." });
+  }
+};
+
+const deleteRouteTier = async (req: Request, res: Response) => {
+  const {
+    tierAnchor_school,
+
+    routeNumber,
+  } = req.body;
+  try {
+    const tierForupdate = await Tier.findOne({
+      where: { tierAnchor_school, routeNumber },
+      include: [{ all: true, nested: true }],
+    });
+
+    if (!tierForupdate) {
+      return res.status(400).json({ message: "Data not found!" });
+    }
+
+    await tierForupdate.destroy();
+    res.status(200).json({ message: "Route/tier successfully deleted." });
+  } catch (error) {
+    console.error("Error occured while deleting route/tier.");
+    res.status(500).json({ messge: "Server error." });
+  }
+};
+
+export {
+  createTier,
+  findTierBySchool,
+  findTierByTime,
+  updateTier,
+  deleteRouteTier,
+};

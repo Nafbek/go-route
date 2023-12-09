@@ -1,6 +1,6 @@
-import 'express';
+import "express";
 import { Router } from "express";
-import { router as MainDriverRoutes } from "./MainDriverRoutes.js";
+import { router as mainDriverRoutes } from "./MainDriverRoutes.js";
 const router = Router();
-router.use("/api", MainDriverRoutes);
+router.use("/api", mainDriverRoutes);
 export { router };
