@@ -7,10 +7,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MainDriver } from "Models/MainDriverModel.js";
-import { Package } from "Models/PackageModel.js";
-import { Stop } from "Models/StopModel.js";
-import { Tier } from "Models/TierModel.js";
+import { MainDriver } from "../Models/MainDriverModel.js";
+import { Package } from "../Models/PackageModel.js";
+import { Stop } from "../Models/StopModel.js";
+import { Tier } from "../Models/TierModel.js";
 const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tier_id, stopName, stopAddress, pickDropTime_home, pickDropTime_school, } = req.body;
     try {
@@ -24,16 +24,16 @@ const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 model: [Tier],
             },
         });
-        res.status(200).json({ message: "Stops successfully created." });
+        res.status(200).json(createdStop);
     }
     catch (error) {
+        console.error("Error occured while creating stop.");
         res.status(500).json({ message: "Server error." });
     }
 });
 const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const foundStop = yield Stop.findAll({
-            where: { stopAddress: req.body.stopAddress },
             include: [
                 Tier,
                 {
@@ -43,12 +43,52 @@ const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             ],
         });
         if (!foundStop) {
-            res.status(400).json({ message: "Data not found!" });
+            return res.status(400).json({ message: "Data not found!" });
         }
         res.status(200).json(foundStop);
     }
     catch (error) {
+        console.error("Error occcured while finding stop.");
         res.status(500).json({ message: "Server error." });
     }
 });
-export { createStop, findStop };
+const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { stopName, stopAddress, pickDropTime_home, pickDropTime_school } = req.body;
+    try {
+        const stopForUpdate = yield Stop.findOne({
+            where: { id: req.params.id },
+            include: [Package, Tier, MainDriver],
+        });
+        if (!stopForUpdate) {
+            return res.status(400).json({ message: "Data not found!" });
+        }
+        yield (stopForUpdate === null || stopForUpdate === void 0 ? void 0 : stopForUpdate.update({
+            stopName,
+            stopAddress,
+            pickDropTime_home,
+            pickDropTime_school,
+        }));
+        res.status(200).json({ messge: "Stop successfully updated." });
+    }
+    catch (error) {
+        console.error("Error occured while updating a stop.");
+        res.status(500).json({ message: "Server error." });
+    }
+});
+const deleteStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const stopFordeletion = yield Stop.findOne({
+            where: { id: req.params.id },
+        });
+        if (!stopFordeletion) {
+            return res.status(400).json({ message: "Data not found!" });
+        }
+        yield stopFordeletion.destroy();
+        res.status(200).json({ messge: "Stop successfully removed." });
+    }
+    catch (error) {
+        console.error("Error occured while deleting a stop.");
+        res.status(500).json({ message: "Server error." });
+    }
+});
+export { createStop, findStop, updateStop, deleteStop };

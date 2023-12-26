@@ -3,9 +3,9 @@ import { sequelize } from "../config/connection.js";
 
 class Student extends Model {
   public id!: number;
-  public studentFirstName!: string | null;
+  public studentFirstName!: string;
   public studentLastName!: string | null;
-  public studentContactNumber!: number | null;
+  public studentContactNumber!: string | null;
 }
 
 Student.init(
@@ -32,7 +32,7 @@ Student.init(
       allowNull: false,
     },
     studentContactNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
   },
   {

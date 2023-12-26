@@ -25,7 +25,7 @@ Student.init({
         allowNull: false,
     },
     studentContactNumber: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
     },
 }, {
     sequelize,

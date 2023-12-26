@@ -28,6 +28,7 @@ const createMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(200).json(newDriver);
     }
     catch (error) {
+        console.error("Error occured while creating driver data.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -52,6 +53,7 @@ const findAllDrivers = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 //Find a single driver by name with complete package
 const findSingleMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { driverFirstName } = req.params;
     try {
         const foundSingleMainDriver = yield MainDriver.findOne({
             include: [
@@ -59,7 +61,7 @@ const findSingleMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, fun
                     all: true,
                     nested: true,
                     // where: { id: req.params.driver_id },
-                    where: { driverFirstName: req.params.driverFirstName },
+                    where: { driverFirstName: driverFirstName },
                 },
             ],
         });
@@ -69,6 +71,7 @@ const findSingleMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(200).json(foundSingleMainDriver);
     }
     catch (error) {
+        console.error("Error occured while fetching a single driver data.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -103,20 +106,22 @@ const findOnlyAllDriversProfile = (req, res) => __awaiter(void 0, void 0, void 0
         res.status(200).json(foundOnlyAllDriversProfile);
     }
     catch (error) {
+        console.error("Error occured while fetching all drivers' profile", error);
         res.status(500).json({ message: "Server error" });
     }
 });
 const findOnlySingleDriverProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const foundOnlySingleDriverProfile = yield MainDriver.findOne({
-            where: { driverFirstName: req.body.driverFirstName },
+            where: { driverFirstName: req.params.driverFirstName },
         });
         if (!foundOnlySingleDriverProfile) {
             res.status(400).json({ message: "Data not found!" });
         }
-        res.status(500).json(foundOnlySingleDriverProfile);
+        res.status(200).json(foundOnlySingleDriverProfile);
     }
     catch (error) {
+        console.error("Error occured while fetching a driver profile.", error);
         res.status(500).json({ message: "Server error." });
     }
 });

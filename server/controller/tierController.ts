@@ -1,4 +1,4 @@
-import { Tier } from "Models/TierModel.js";
+import { Tier } from "../Models/TierModel.js";
 import { Request, Response } from "express";
 
 //Create a tier with all associations
@@ -33,7 +33,7 @@ const createTier = async (req: Request, res: Response) => {
       // },
     });
 
-    if (!createTier) {
+    if (!createdTier) {
       return res.status(400).json({ message: "Data not found!" });
     }
     res.status(200).json({ message: "Tier successfully created." });
@@ -57,6 +57,7 @@ const findTierByTime = async (req: Request, res: Response) => {
     }
     res.status(200).json(foundTierByTime);
   } catch (error) {
+    console.error("Error occured while finding tier by time.");
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -75,7 +76,8 @@ const findTierBySchool = async (req: Request, res: Response) => {
     }
     res.status(200).json(foundTierBySchool);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Error coccured while finding route/tier by school.");
+    res.status(500).json({ message: "Server error." });
   }
 };
 

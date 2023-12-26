@@ -29,6 +29,7 @@ const createMainDriver = async (req: Request, res: Response) => {
     );
     res.status(200).json(newDriver);
   } catch (error) {
+    console.error("Error occured while creating driver data.", error);
     res.status(500).json({ message: "Server error." });
   }
 };
@@ -42,8 +43,7 @@ const findAllDrivers = async (req: Request, res: Response) => {
     });
     console.log("Drivers found: ", foundAllDrivers);
     if (!foundAllDrivers) {
-      res.status(400).json({ message: "Data not found!" });
-      return;
+      return res.status(400).json({ message: "Data not found!" });
     }
     res.status(200).json(foundAllDrivers);
   } catch (error) {
@@ -54,6 +54,7 @@ const findAllDrivers = async (req: Request, res: Response) => {
 
 //Find a single driver by name with complete package
 const findSingleMainDriver = async (req: Request, res: Response) => {
+  const { driverFirstName } = req.params;
   try {
     const foundSingleMainDriver = await MainDriver.findOne({
       include: [
@@ -61,7 +62,7 @@ const findSingleMainDriver = async (req: Request, res: Response) => {
           all: true,
           nested: true,
           // where: { id: req.params.driver_id },
-          where: { driverFirstName: req.params.driverFirstName },
+          where: { driverFirstName: driverFirstName },
         },
       ],
     });
@@ -70,6 +71,7 @@ const findSingleMainDriver = async (req: Request, res: Response) => {
     }
     res.status(200).json(foundSingleMainDriver);
   } catch (error) {
+    console.error("Error occured while fetching a single driver data.", error);
     res.status(500).json({ message: "Server error." });
   }
 };
@@ -77,21 +79,23 @@ const findSingleMainDriver = async (req: Request, res: Response) => {
 //Find all drivers by school/anchor
 
 const findAllDriversBySchool = async (req: Request, res: Response) => {
+  const { tierAnchor_school } = req.params;
   try {
     const foundAllDriversBySchool = await MainDriver.findAndCountAll({
       include: [
         {
           all: true,
           nested: true,
-          where: { tierAnchor_school: req.body.tierAnchor_school },
+          where: { tierAnchor_school: tierAnchor_school },
         },
       ],
     });
     if (!foundAllDriversBySchool) {
-      res.status(400).json({ message: "Data not found!" });
+      return res.status(400).json({ message: "Data not found!" });
     }
     res.status(200).json(foundAllDriversBySchool);
   } catch (error) {
+    console.error("Error occured while fetching driver by school they go to.");
     res.status(500).json({ message: "Server error." });
   }
 };
@@ -102,31 +106,35 @@ const findOnlyAllDriversProfile = async (req: Request, res: Response) => {
     const foundOnlyAllDriversProfile = await MainDriver.findAll();
 
     if (!foundOnlyAllDriversProfile) {
-      res.status(400).json({ message: "Data not found!" });
+      return res.status(400).json({ message: "Data not found!" });
     }
     res.status(200).json(foundOnlyAllDriversProfile);
   } catch (error) {
+    console.error("Error occured while fetching all drivers' profile", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
 const findOnlySingleDriverProfile = async (req: Request, res: Response) => {
+  const { driverFirstName } = req.params;
   try {
     const foundOnlySingleDriverProfile = await MainDriver.findOne({
-      where: { driverFirstName: req.params.driverFirstName },
+      where: { driverFirstName: driverFirstName },
     });
 
     if (!foundOnlySingleDriverProfile) {
-      res.status(400).json({ message: "Data not found!" });
+      return res.status(400).json({ message: "Data not found!" });
     }
-    res.status(500).json(foundOnlySingleDriverProfile);
+    res.status(200).json(foundOnlySingleDriverProfile);
   } catch (error) {
+    console.error("Error occured while fetching a driver profile.", error);
     res.status(500).json({ message: "Server error." });
   }
 };
 
 const updateDriver = async (req: Request, res: Response) => {
   const {
+    id,
     driverFirstName,
     driverLastName,
     driverContactNumber,
@@ -134,13 +142,13 @@ const updateDriver = async (req: Request, res: Response) => {
   } = req.body;
   try {
     const driverForUpdate = await MainDriver.findOne({
-      where: { driverFirstName, driverLastName },
+      where: { driverFirstName, driverLastName, id },
       include: [{ all: true, nested: true }],
     });
     if (!driverForUpdate) {
       return res.status(400).json({ message: "Data not found!" });
     }
-    await driverForUpdate?.update({
+    await driverForUpdate.update({
       driverFirstName,
       driverLastName,
       driverContactNumber,
