@@ -3,7 +3,7 @@ import { Router } from "express";
 const router = Router();
 router.route("/package").post(createPackageInfo).get(findAllPackage);
 router
-    .route("/package/:packageName")
+    .route("/package/:packageNumber")
     .get(findSinglePackage)
     .put(updatePackage)
     .delete(deleteSinglePackage);

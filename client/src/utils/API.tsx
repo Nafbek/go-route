@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const API_BASE_URL =
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 
 interface MainDriverApi {
   createMainDriver: (data: any) => Promise<string>;
@@ -7,18 +9,22 @@ interface MainDriverApi {
   getAllDriverBySchool: () => Promise<string[] | null>;
   getSingleDriver: () => Promise<string | null>;
   getOnlySingleDriverProfile: () => Promise<string | null>;
-  updateDriver: (data: any) => Promise<string>;
+  updateDriver: (data: any) => Promise<string | null>;
+  deleteDriver: (driverName: any) => Promise<string>;
 }
 
 const MainDriverApi: MainDriverApi = {
   createMainDriver: async (data) => {
+    console.log(data);
     try {
-      const response = await axios.post(`${API_BASE_URL}/driver`, data, {
+      console.log("Req. url", `${API_BASE_URL}/api/driver`);
+      const response = await axios.post(`${API_BASE_URL}/api/driver`, data, {
         headers: { "Content-Type": "application/json" },
       });
+
       return response.data;
     } catch (error) {
-      console.error("Server error occured", error);
+      console.log("Server error occured", error);
       throw error;
     }
   },
@@ -26,7 +32,7 @@ const MainDriverApi: MainDriverApi = {
   getAllMainDriver: async () => {
     try {
       const response: AxiosResponse<string[]> = await axios.get(
-        `${API_BASE_URL}/driver/`,
+        `${API_BASE_URL}/api/driver/`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -47,7 +53,7 @@ const MainDriverApi: MainDriverApi = {
   getSingleDriver: async () => {
     try {
       const response: AxiosResponse<string> = await axios.get(
-        `${API_BASE_URL}/driver/driverFirstName`,
+        `${API_BASE_URL}/api/driver/driverFirstName`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -68,7 +74,7 @@ const MainDriverApi: MainDriverApi = {
   getOnlySingleDriverProfile: async () => {
     try {
       const response: AxiosResponse<string> = await axios.get(
-        `${API_BASE_URL}/driver/profile`,
+        `${API_BASE_URL}/api/driver/profile`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -88,7 +94,7 @@ const MainDriverApi: MainDriverApi = {
   getAllDriverBySchool: async () => {
     try {
       const response: AxiosResponse<string[]> = await axios.get(
-        `${API_BASE_URL}/driver/tierAnchor_school`,
+        `${API_BASE_URL}/api/driver/tierAnchor_school`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -106,10 +112,10 @@ const MainDriverApi: MainDriverApi = {
     }
   },
 
-  updateDriver: async (data:any) => {
+  updateDriver: async (data: any) => {
     try {
       const response: AxiosResponse<string> = await axios.put(
-        `${API_BASE_URL}/driver/driverFirstName`,
+        `${API_BASE_URL}/api/driver/driverFirstName`,
         data,
         {
           headers: {
@@ -122,6 +128,27 @@ const MainDriverApi: MainDriverApi = {
         return null;
       }
       return response.data;
+    } catch (error) {
+      console.error("Server error occured.", error);
+      throw error;
+    }
+  },
+
+  deleteDriver: async () => {
+    try {
+      const response = await axios.delete(
+        `${API_BASE_URL}/api/driver/driverFirstName`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response || response.status !== 200) {
+        console.error("Unable to delete driver's data. Please try again.");
+        throw new Error("Delete request failed.");
+      }
+      return "Driver's Data successfully deleted.";
     } catch (error) {
       console.error("Server error occured.", error);
       throw error;

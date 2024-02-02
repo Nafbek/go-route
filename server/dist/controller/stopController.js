@@ -12,12 +12,13 @@ import { Package } from "../Models/PackageModel.js";
 import { Stop } from "../Models/StopModel.js";
 import { Tier } from "../Models/TierModel.js";
 const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tier_id, stopName, stopAddress, pickDropTime_home, pickDropTime_school, } = req.body;
+    const { tier_id, stopName, stopAddress, destinationAddress, pickDropTime_home, pickDropTime_school, } = req.body;
     try {
         const createdStop = yield Stop.create({
             tier_id,
             stopName,
             stopAddress,
+            destinationAddress,
             pickDropTime_home,
             pickDropTime_school,
             include: {
@@ -27,7 +28,7 @@ const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(200).json(createdStop);
     }
     catch (error) {
-        console.error("Error occured while creating stop.");
+        console.error("Error occured while creating stop.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -48,7 +49,7 @@ const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(200).json(foundStop);
     }
     catch (error) {
-        console.error("Error occcured while finding stop.");
+        console.error("Error occcured while finding stop.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -62,16 +63,16 @@ const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (!stopForUpdate) {
             return res.status(400).json({ message: "Data not found!" });
         }
-        yield (stopForUpdate === null || stopForUpdate === void 0 ? void 0 : stopForUpdate.update({
+        yield stopForUpdate.update({
             stopName,
             stopAddress,
             pickDropTime_home,
             pickDropTime_school,
-        }));
+        });
         res.status(200).json({ messge: "Stop successfully updated." });
     }
     catch (error) {
-        console.error("Error occured while updating a stop.");
+        console.error("Error occured while updating a stop.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -87,7 +88,7 @@ const deleteStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(200).json({ messge: "Stop successfully removed." });
     }
     catch (error) {
-        console.error("Error occured while deleting a stop.");
+        console.error("Error occured while deleting a stop.", error);
         res.status(500).json({ message: "Server error." });
     }
 });

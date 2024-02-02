@@ -4,6 +4,7 @@ import { MainDriver } from "../Models/MainDriverModel.js";
 //Create driver with complete package
 const createMainDriver = async (req: Request, res: Response) => {
   try {
+    console.log("Create Driver: ", req.body);
     const {
       driverFirstName,
       driverLastName,
@@ -11,6 +12,7 @@ const createMainDriver = async (req: Request, res: Response) => {
       driverSecondContactNumber,
     } = req.body;
 
+    
     const newDriver = await MainDriver.create(
       {
         driverFirstName,

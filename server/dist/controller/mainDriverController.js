@@ -11,6 +11,7 @@ import { MainDriver } from "../Models/MainDriverModel.js";
 //Create driver with complete package
 const createMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("Create Driver: ", req.body);
         const { driverFirstName, driverLastName, driverContactNumber, driverSecondContactNumber, } = req.body;
         const newDriver = yield MainDriver.create({
             driverFirstName,
@@ -41,8 +42,7 @@ const findAllDrivers = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
         console.log("Drivers found: ", foundAllDrivers);
         if (!foundAllDrivers) {
-            res.status(400).json({ message: "Data not found!" });
-            return;
+            return res.status(400).json({ message: "Data not found!" });
         }
         res.status(200).json(foundAllDrivers);
     }
@@ -77,22 +77,24 @@ const findSingleMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, fun
 });
 //Find all drivers by school/anchor
 const findAllDriversBySchool = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { tierAnchor_school } = req.params;
     try {
         const foundAllDriversBySchool = yield MainDriver.findAndCountAll({
             include: [
                 {
                     all: true,
                     nested: true,
-                    where: { tierAnchor_school: req.body.tierAnchor_school },
+                    where: { tierAnchor_school: tierAnchor_school },
                 },
             ],
         });
         if (!foundAllDriversBySchool) {
-            res.status(400).json({ message: "Data not found!" });
+            return res.status(400).json({ message: "Data not found!" });
         }
         res.status(200).json(foundAllDriversBySchool);
     }
     catch (error) {
+        console.error("Error occured while fetching driver by school they go to.");
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -101,7 +103,7 @@ const findOnlyAllDriversProfile = (req, res) => __awaiter(void 0, void 0, void 0
     try {
         const foundOnlyAllDriversProfile = yield MainDriver.findAll();
         if (!foundOnlyAllDriversProfile) {
-            res.status(400).json({ message: "Data not found!" });
+            return res.status(400).json({ message: "Data not found!" });
         }
         res.status(200).json(foundOnlyAllDriversProfile);
     }
@@ -111,12 +113,13 @@ const findOnlyAllDriversProfile = (req, res) => __awaiter(void 0, void 0, void 0
     }
 });
 const findOnlySingleDriverProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { driverFirstName } = req.params;
     try {
         const foundOnlySingleDriverProfile = yield MainDriver.findOne({
-            where: { driverFirstName: req.params.driverFirstName },
+            where: { driverFirstName: driverFirstName },
         });
         if (!foundOnlySingleDriverProfile) {
-            res.status(400).json({ message: "Data not found!" });
+            return res.status(400).json({ message: "Data not found!" });
         }
         res.status(200).json(foundOnlySingleDriverProfile);
     }
@@ -126,21 +129,21 @@ const findOnlySingleDriverProfile = (req, res) => __awaiter(void 0, void 0, void
     }
 });
 const updateDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { driverFirstName, driverLastName, driverContactNumber, driverSecondContactNumber, } = req.body;
+    const { id, driverFirstName, driverLastName, driverContactNumber, driverSecondContactNumber, } = req.body;
     try {
         const driverForUpdate = yield MainDriver.findOne({
-            where: { driverFirstName, driverLastName },
+            where: { driverFirstName, driverLastName, id },
             include: [{ all: true, nested: true }],
         });
         if (!driverForUpdate) {
             return res.status(400).json({ message: "Data not found!" });
         }
-        yield (driverForUpdate === null || driverForUpdate === void 0 ? void 0 : driverForUpdate.update({
+        yield driverForUpdate.update({
             driverFirstName,
             driverLastName,
             driverContactNumber,
             driverSecondContactNumber,
-        }));
+        });
         res.status(200).json({ message: "Driver successfully updated." });
     }
     catch (error) {

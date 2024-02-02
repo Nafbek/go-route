@@ -1,5 +1,7 @@
 import path from "path";
 import express from "express";
+import cors from "cors";
+// import { CorsOptions } from "cors";
 import { sequelize } from "./config/connection.js";
 import { router as routes } from "./routes/API/index.js";
 
@@ -16,6 +18,7 @@ app.use(express.json());
 // app.use(express.static(path.join(__dirname, "../client/build")));
 
 app.use(routes);
+app.use(cors);
 
 // app.get("/", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../client/build", "index.html"));

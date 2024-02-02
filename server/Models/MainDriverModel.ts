@@ -8,6 +8,10 @@ class MainDriver extends Model {
   public driverContactNumber!: string | null;
   public driverSecondContactNumber!: string | null;
   public password!: string;
+
+  // getFullName() {
+  //   return [this.driverFirstName, this.driverLastName].join(" ");
+  // }
 }
 
 MainDriver.init(
