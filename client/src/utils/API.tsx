@@ -10,7 +10,7 @@ interface MainDriverApi {
   getSingleDriver: () => Promise<string | null>;
   getOnlySingleDriverProfile: () => Promise<string | null>;
   updateDriver: (data: any) => Promise<string | null>;
-  deleteDriver: (driverName: any) => Promise<string>;
+  deleteDriver: (driverName: string) => Promise<string>;
 }
 
 const MainDriverApi: MainDriverApi = {
@@ -24,7 +24,7 @@ const MainDriverApi: MainDriverApi = {
 
       return response.data;
     } catch (error) {
-      console.log("Server error occured", error);
+      console.error("Server error occured", error);
       throw error;
     }
   },
@@ -124,7 +124,7 @@ const MainDriverApi: MainDriverApi = {
         }
       );
       if (!response || response.status !== 200) {
-        console.error("Data requested not found. Please try again.");
+        console.error("Data requested for update not found. Please try again.");
         return null;
       }
       return response.data;
