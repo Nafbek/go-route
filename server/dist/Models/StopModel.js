@@ -24,7 +24,11 @@ Stop.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    pickDropTime_home: {
+    pickupTime_home: {
+        type: DataTypes.TIME,
+        allowNull: false,
+    },
+    dropoffTime_home: {
         type: DataTypes.TIME,
         allowNull: false,
     },
@@ -32,9 +36,13 @@ Stop.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
-    pickDropTime_school: {
+    pickupTime_school: {
         type: DataTypes.TIME,
         allowNull: true,
+    },
+    dropoffTime_school: {
+        type: DataTypes.TIME,
+        allowNull: false,
     },
 }, {
     sequelize,
@@ -42,7 +50,7 @@ Stop.init({
     freezeTableName: true,
     underscored: true,
     paranoid: true,
-    deletedAt: 'timeRemoved',
+    deletedAt: "timeRemoved",
     modelName: "stop",
 });
 export { Stop };

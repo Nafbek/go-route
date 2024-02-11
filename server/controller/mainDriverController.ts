@@ -12,7 +12,6 @@ const createMainDriver = async (req: Request, res: Response) => {
       driverSecondContactNumber,
     } = req.body;
 
-    
     const newDriver = await MainDriver.create(
       {
         driverFirstName,
@@ -136,26 +135,31 @@ const findOnlySingleDriverProfile = async (req: Request, res: Response) => {
 
 const updateDriver = async (req: Request, res: Response) => {
   const {
-    id,
     driverFirstName,
     driverLastName,
     driverContactNumber,
     driverSecondContactNumber,
   } = req.body;
   try {
-    const driverForUpdate = await MainDriver.findOne({
-      where: { driverFirstName, driverLastName, id },
-      include: [{ all: true, nested: true }],
-    });
+    const driverForUpdate = await MainDriver.update(
+      {
+        driverFirstName,
+        driverLastName,
+        driverContactNumber,
+        driverSecondContactNumber,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+
+    console.log("This is driver's data for update: ", driverForUpdate);
     if (!driverForUpdate) {
       return res.status(400).json({ message: "Data not found!" });
     }
-    await driverForUpdate.update({
-      driverFirstName,
-      driverLastName,
-      driverContactNumber,
-      driverSecondContactNumber,
-    });
+
     res.status(200).json({ message: "Driver successfully updated." });
   } catch (error) {
     console.error("Error occured while updating driver", error);
@@ -164,16 +168,14 @@ const updateDriver = async (req: Request, res: Response) => {
 };
 
 const deleteSingleDriver = async (req: Request, res: Response) => {
-  const { id, driverFirstName } = req.body;
   try {
-    const driverForDeletion = await MainDriver.findOne({
-      where: { id, driverFirstName },
-      include: [{ all: true, nested: true }],
+    const driverForDeletion = await MainDriver.destroy({
+      where: { id: req.params.id },
     });
+    console.log("This is driver's data for deletion", driverForDeletion);
     if (!driverForDeletion) {
       return res.status(400).json({ message: "Data not found!" });
     }
-    await driverForDeletion.destroy();
     res.status(200).json({ message: "Driver successfully removed." });
   } catch (error) {
     console.error("Error occured while deleting driver", error);

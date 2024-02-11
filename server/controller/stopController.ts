@@ -10,8 +10,10 @@ const createStop = async (req: Request, res: Response) => {
     stopName,
     stopAddress,
     destinationAddress,
-    pickDropTime_home,
-    pickDropTime_school,
+    pickupTime_home,
+    dropoffTime_home,
+    pickupTime_school,
+    dropoffTime_school,
   } = req.body;
 
   try {
@@ -20,8 +22,10 @@ const createStop = async (req: Request, res: Response) => {
       stopName,
       stopAddress,
       destinationAddress,
-      pickDropTime_home,
-      pickDropTime_school,
+      pickupTime_home,
+      dropoffTime_home,
+      pickupTime_school,
+      dropoffTime_school,
       include: {
         model: [Tier],
       },
@@ -56,8 +60,14 @@ const findStop = async (req: Request, res: Response) => {
 };
 
 const updateStop = async (req: Request, res: Response) => {
-  const { stopName, stopAddress, pickDropTime_home, pickDropTime_school } =
-    req.body;
+  const {
+    stopName,
+    stopAddress,
+    pickupTime_home,
+    dropoffTime_home,
+    pickupTime_school,
+    dropoffTime_school,
+  } = req.body;
   try {
     const stopForUpdate = await Stop.findOne({
       where: { id: req.params.id },
@@ -69,8 +79,10 @@ const updateStop = async (req: Request, res: Response) => {
     await stopForUpdate.update({
       stopName,
       stopAddress,
-      pickDropTime_home,
-      pickDropTime_school,
+      pickupTime_home,
+      dropoffTime_home,
+      pickupTime_school,
+      dropoffTime_school,
     });
     res.status(200).json({ messge: "Stop successfully updated." });
   } catch (error) {

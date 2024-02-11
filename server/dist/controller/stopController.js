@@ -12,15 +12,17 @@ import { Package } from "../Models/PackageModel.js";
 import { Stop } from "../Models/StopModel.js";
 import { Tier } from "../Models/TierModel.js";
 const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tier_id, stopName, stopAddress, destinationAddress, pickDropTime_home, pickDropTime_school, } = req.body;
+    const { tier_id, stopName, stopAddress, destinationAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
     try {
         const createdStop = yield Stop.create({
             tier_id,
             stopName,
             stopAddress,
             destinationAddress,
-            pickDropTime_home,
-            pickDropTime_school,
+            pickupTime_home,
+            dropoffTime_home,
+            pickupTime_school,
+            dropoffTime_school,
             include: {
                 model: [Tier],
             },
@@ -54,7 +56,7 @@ const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { stopName, stopAddress, pickDropTime_home, pickDropTime_school } = req.body;
+    const { stopName, stopAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
     try {
         const stopForUpdate = yield Stop.findOne({
             where: { id: req.params.id },
@@ -66,8 +68,10 @@ const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         yield stopForUpdate.update({
             stopName,
             stopAddress,
-            pickDropTime_home,
-            pickDropTime_school,
+            pickupTime_home,
+            dropoffTime_home,
+            pickupTime_school,
+            dropoffTime_school,
         });
         res.status(200).json({ messge: "Stop successfully updated." });
     }

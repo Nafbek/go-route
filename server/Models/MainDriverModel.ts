@@ -7,7 +7,7 @@ class MainDriver extends Model {
   public driverLastName!: string | null;
   public driverContactNumber!: string | null;
   public driverSecondContactNumber!: string | null;
-  public password!: string;
+  public passcode!: string;
 
   // getFullName() {
   //   return [this.driverFirstName, this.driverLastName].join(" ");
@@ -38,9 +38,13 @@ MainDriver.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    password: {
+    passcode: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+      defaultValue: function () {
+        const passcodeRandom = Math.random().toString(36).slice(-6);
+        return passcodeRandom;
+      },
     },
   },
   {

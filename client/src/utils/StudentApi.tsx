@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 interface StudentApi {
-  createStudent: (data: string) => Promise<string>;
+  createStudent: (data: any) => Promise<string[]>;
   findSingleStudent: () => Promise<string | null>;
   updateStudent: (data: string) => Promise<string | null>;
   deleteStudent: () => Promise<string | null>;
@@ -79,3 +79,5 @@ const StudentApi: StudentApi = {
     }
   },
 };
+
+export { StudentApi };

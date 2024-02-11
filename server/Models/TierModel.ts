@@ -3,9 +3,13 @@ import { sequelize } from "../config/connection.js";
 
 class Tier extends Model {
   public id!: number;
+  public package_id!: number | null;
   public tierAnchor_school!: string | null;
-  public timeStart!: Date;
-  public timeEnd!: Date;
+  public shift!: string;
+  public schoolContactNumber!: string | null;
+  public routeNumber!: string;
+  public timeStart!: string;
+  public timeEnd!: string;
   public totalRiders!: number | null;
   public runningDays!: string | null;
   public totalMiles!: number | null;
@@ -24,7 +28,7 @@ Tier.init(
       allowNull: false,
     },
     schoolContactNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     package_id: {
@@ -33,6 +37,7 @@ Tier.init(
         model: "package",
         key: "id",
       },
+      allowNull: true,
     },
     routeNumber: {
       type: DataTypes.STRING,
@@ -43,11 +48,11 @@ Tier.init(
       allowNull: false,
     },
     timeStart: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     timeEnd: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     totalRiders: {

@@ -5,8 +5,10 @@ class Stop extends Model {
   public id!: number;
   public stopName!: string | null;
   public stopAddress!: string;
-  public pickDropTime_home!: Date;
-  public pickDropTime_school!: Date;
+  public pickupTime_home!: Date;
+  public dropoffTime_home!: Date;
+  public pickupTime_school!: Date;
+  public dropoffTime_school!: Date;
 }
 
 Stop.init(
@@ -32,7 +34,11 @@ Stop.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    pickDropTime_home: {
+    pickupTime_home: {
+      type: DataTypes.TIME,
+      allowNull: false,
+    },
+    dropoffTime_home: {
       type: DataTypes.TIME,
       allowNull: false,
     },
@@ -40,9 +46,13 @@ Stop.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    pickDropTime_school: {
+    pickupTime_school: {
       type: DataTypes.TIME,
       allowNull: true,
+    },
+    dropoffTime_school: {
+      type: DataTypes.TIME,
+      allowNull: false,
     },
   },
   {
@@ -51,7 +61,7 @@ Stop.init(
     freezeTableName: true,
     underscored: true,
     paranoid: true,
-    deletedAt: 'timeRemoved',
+    deletedAt: "timeRemoved",
     modelName: "stop",
   }
 );

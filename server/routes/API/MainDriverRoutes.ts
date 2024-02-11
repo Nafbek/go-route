@@ -20,12 +20,11 @@ router
   .route("/driver/profile/:driverFirstName")
   .get(findOnlySingleDriverProfile);
 
-  
+router.route("/driver/:driverFirstName").get(findSingleMainDriver);
+
 router
-  .route("/driver/:driverFirstName")
-  .get(findSingleMainDriver)
+  .route("/driver/profile/:id")
   .delete(deleteSingleDriver)
   .put(updateDriver);
-router.route("/driver/:driverFirstName");
 
 export { router };

@@ -27,14 +27,14 @@ const createTier = async (req: Request, res: Response) => {
       totalRiders,
       runningDays,
       totalMiles,
-      // include: {
-      //   all: true,
-      //   nested: true,
-      // },
+      include: {
+        all: true,
+        nested: true,
+      },
     });
 
     if (!createdTier) {
-      return res.status(400).json({ message: "Data not found!" });
+      return res.status(400).json();
     }
     res.status(200).json({ message: "Tier successfully created." });
   } catch (error) {

@@ -14,7 +14,7 @@ Tier.init({
         allowNull: false,
     },
     schoolContactNumber: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     package_id: {
@@ -23,6 +23,7 @@ Tier.init({
             model: "package",
             key: "id",
         },
+        allowNull: true,
     },
     routeNumber: {
         type: DataTypes.STRING,
@@ -33,11 +34,11 @@ Tier.init({
         allowNull: false,
     },
     timeStart: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     timeEnd: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     totalRiders: {
