@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { MainDriver } from "../Models/MainDriverModel.js";
+import { Package } from "Models/PackageModel.js";
 //Create driver with complete package
 const createMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -56,14 +57,15 @@ const findSingleMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, fun
     const { driverFirstName } = req.params;
     try {
         const foundSingleMainDriver = yield MainDriver.findOne({
-            include: [
-                {
-                    all: true,
-                    nested: true,
-                    // where: { id: req.params.driver_id },
-                    where: { driverFirstName: driverFirstName },
-                },
-            ],
+            where: { driverFirstName: driverFirstName },
+            include: Package
+            // include: [
+            //   {
+            //     all: true,
+            //     nested: true,
+            //     // where: { id: req.params.driver_id },
+            //   },
+            // ],
         });
         if (!foundSingleMainDriver) {
             res.status(400).json({ message: "Data not found!" });
@@ -129,21 +131,22 @@ const findOnlySingleDriverProfile = (req, res) => __awaiter(void 0, void 0, void
     }
 });
 const updateDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, driverFirstName, driverLastName, driverContactNumber, driverSecondContactNumber, } = req.body;
+    const { driverFirstName, driverLastName, driverContactNumber, driverSecondContactNumber, } = req.body;
     try {
-        const driverForUpdate = yield MainDriver.findOne({
-            where: { driverFirstName, driverLastName, id },
-            include: [{ all: true, nested: true }],
-        });
-        if (!driverForUpdate) {
-            return res.status(400).json({ message: "Data not found!" });
-        }
-        yield driverForUpdate.update({
+        const driverForUpdate = yield MainDriver.update({
             driverFirstName,
             driverLastName,
             driverContactNumber,
             driverSecondContactNumber,
+        }, {
+            where: {
+                id: req.params.id,
+            },
         });
+        console.log("This is driver's data for update: ", driverForUpdate);
+        if (!driverForUpdate) {
+            return res.status(400).json({ message: "Data not found!" });
+        }
         res.status(200).json({ message: "Driver successfully updated." });
     }
     catch (error) {
@@ -152,16 +155,14 @@ const updateDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 const deleteSingleDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, driverFirstName } = req.body;
     try {
-        const driverForDeletion = yield MainDriver.findOne({
-            where: { id, driverFirstName },
-            include: [{ all: true, nested: true }],
+        const driverForDeletion = yield MainDriver.destroy({
+            where: { id: req.params.id },
         });
+        console.log("This is driver's data for deletion", driverForDeletion);
         if (!driverForDeletion) {
             return res.status(400).json({ message: "Data not found!" });
         }
-        yield driverForDeletion.destroy();
         res.status(200).json({ message: "Driver successfully removed." });
     }
     catch (error) {

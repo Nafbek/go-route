@@ -16,7 +16,7 @@ Student.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    stop_id: {
+    stopId: {
       type: DataTypes.INTEGER,
       references: {
         model: "stop",

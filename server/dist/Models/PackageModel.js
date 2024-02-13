@@ -20,10 +20,6 @@ Package.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    // routeNumber: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    // },
     packageNumber: {
         type: DataTypes.STRING,
         allowNull: false,

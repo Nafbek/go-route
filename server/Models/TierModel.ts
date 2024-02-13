@@ -31,7 +31,7 @@ Tier.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    package_id: {
+    packageId: {
       type: DataTypes.INTEGER,
       references: {
         model: "package",

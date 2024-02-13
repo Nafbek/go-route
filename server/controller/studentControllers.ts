@@ -1,11 +1,16 @@
 import { Response, Request } from "express";
 import { Student } from "../Models/StudentModels.js";
+import { Package } from "Models/PackageModel.js";
+import { Tier } from "Models/TierModel.js";
+import { Stop } from "Models/StopModel.js";
 
 const createStudent = async (req: Request, res: Response) => {
-  const { studentFirstName, studentLastName, studentContactNumber } = req.body;
+  const { stopId, studentFirstName, studentLastName, studentContactNumber } =
+    req.body;
 
   try {
     const createdStudent = await Student.create({
+      stopId,
       studentFirstName,
       studentLastName,
       studentContactNumber,
@@ -20,7 +25,18 @@ const createStudent = async (req: Request, res: Response) => {
 
 const findSingleStudent = async (res: Response, req: Request) => {
   try {
-    const foundSingleStudent = await Student.findByPk();
+    const { id } = req.params;
+    const foundSingleStudent = await Student.findOne({
+      include: [
+        {
+          model: Package,
+          include: [
+            { model: Tier, include: [{ model: Stop, as: "StudentAtStop" }] },
+          ],
+        },
+      ],
+      where: { id: id },
+    });
     if (!foundSingleStudent) {
       return res.status(400).json({ message: "Data not found!" });
     }
@@ -36,12 +52,6 @@ const updateStudent = async (req: Request, res: Response) => {
   try {
     const studentForUpdate = await Student.findOne({
       where: { id: req.params.id },
-      include: [
-        {
-          all: true,
-          nested: true,
-        },
-      ],
     });
     if (!studentForUpdate) {
       return res.status(400).json({ message: "Data not found!" });
@@ -63,7 +73,6 @@ const deleteStudent = async (req: Request, res: Response) => {
   try {
     const studentForDeletion = await Student.findOne({
       where: { id: req.params.id },
-      include: [{ all: true, nested: true }],
     });
 
     if (!studentForDeletion) {

@@ -5,42 +5,46 @@ import { Student } from "./StudentModels.js";
 import { Tier } from "./TierModel.js";
 import { Package } from "./PackageModel.js";
 
+//Driver and package association
 MainDriver.hasMany(Package, {
-  foreignKey: "driver_id",
+  foreignKey: "driverId",
   onDelete: "CASCADE",
 });
 
 Package.belongsTo(MainDriver, {
-  foreignKey: "driver_id",
+  foreignKey: "driverId",
 });
 
 Package.hasMany(Tier, {
-  foreignKey: "package_id",
+  foreignKey: "packageId",
   onDelete: "CASCADE",
 });
 
 Tier.belongsTo(Package, {
-  foreignKey: "package_id",
+  foreignKey: "packageId",
 });
 
 Tier.hasMany(Stop, {
-  foreignKey: "tier_id",
+  foreignKey: "tierId",
   onDelete: "CASCADE",
 });
 
 Stop.belongsToMany(Tier, {
-  //   foreignKey: "tier_id",
+  foreignKey: "stopId",
   //   onDelete: "CASCADE",
+  as: "StopOnTier",
   through: "StopTier",
 });
 
 Stop.hasMany(Student, {
-  foreignKey: "stop_id",
+  foreignKey: "stopId",
   onDelete: "CASCADE",
 });
 
 Student.belongsToMany(Stop, {
+  as: "StudentAtStop",
   through: "StudentStop",
+  foreignKey: "studentId",
 });
 
 export { MainDriver, Package, Tier, Stop, Student };

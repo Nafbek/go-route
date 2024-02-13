@@ -1,20 +1,29 @@
 import { Request, Response } from "express";
 import { Package } from "../Models/PackageModel.js";
+import { Tier } from "../Models/TierModel.js";
+import { Stop } from "../Models/StopModel.js";
+import { Student } from "../Models/StudentModels.js";
 
 // Create package with
 const createPackageInfo = async (req: Request, res: Response) => {
-  const { packageName, packageNumber, districtName, packageDescription } =
-    req.body;
+  const {
+    packageName,
+    packageNumber,
+    districtName,
+    packageDescription,
+    driverId,
+  } = req.body;
   try {
     const createdPackageInfo = await Package.create({
+      driverId,
       packageName,
       packageNumber,
       districtName,
       packageDescription,
-      include: {
-        all: true,
-        nested: true,
-      },
+      // include: {
+      //   all: true,
+      //   nested: true,
+      // },
     });
 
     res.status(200).json(createdPackageInfo);
@@ -41,10 +50,12 @@ const findSinglePackage = async (req: Request, res: Response) => {
   const { packageNumber } = req.params;
   try {
     const foundPackage = await Package.findOne({
-      include: {
-        all: true,
-        nested: true,
-      },
+      include: [
+        {
+          model: Tier,
+          include: [{ model: Stop, include: [Student] }],
+        },
+      ],
       where: {
         packageNumber: packageNumber,
       },
@@ -64,45 +75,37 @@ const updatePackage = async (req: Request, res: Response) => {
   const { driverId, districtName, packageNumber, packageDescription } =
     req.body;
   try {
-    const [affectedRow, packageForUpdate] = await Package.update(
+    const packageForUpdate = await Package.update(
       { driverId, districtName, packageNumber, packageDescription },
       {
-        where: { packageNumber },
-        returning: true,
-        logging: console.log,
+        where: { packageNumber: req.params.packageNumber },
+        // returning: true,
+        // logging: console.log,
       }
     );
-    if (
-      affectedRow === 0 ||
-      !packageForUpdate ||
-      packageForUpdate.length === 0
-    ) {
+    if (!packageForUpdate) {
       return res
         .status(400)
         .json({ message: "Data not found for the update!" });
     }
 
-    const updatedPackage = packageForUpdate[0];
-    res
-      .status(200)
-      .json({ message: "Package successfully updated.", updatedPackage });
+    res.status(200).json({ message: "Package successfully updated." });
   } catch (error) {
     console.error("Error occured while updating package.", error);
     res.status(500).json({ message: "Server error." });
   }
 };
-
 const deleteSinglePackage = async (req: Request, res: Response) => {
-  const { id, packageNumber } = req.body;
   try {
     const packageForDeletion = await Package.destroy({
-      where: { id, packageNumber },
-      // include: [{ all: true, nested: true }],
+      where: {
+        packageNumber: req.params.packageNumber,
+      },
     });
     if (!packageForDeletion) {
       return res.status(400).json({ message: "Data not found!" });
     }
-    // await packageForDeletion.destroy();
+
     res.status(200).json({ message: "Package successfully deleted." });
   } catch (error) {
     console.error("Error occurd while deleting package", error);

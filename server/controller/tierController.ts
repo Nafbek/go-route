@@ -1,5 +1,8 @@
+import { Student } from "../Models/StudentModels.js";
+import { Stop } from "../Models/StopModel.js";
 import { Tier } from "../Models/TierModel.js";
 import { Request, Response } from "express";
+import { Package } from "Models/PackageModel.js";
 
 //Create a tier with all associations
 const createTier = async (req: Request, res: Response) => {
@@ -47,10 +50,14 @@ const findTierByTime = async (req: Request, res: Response) => {
   try {
     const foundTierByTime = await Tier.findAll({
       where: { timeStart: req.params.timeStart },
-      include: {
-        all: true,
-        nested: true,
-      },
+      include: [
+        { model: Package },
+        {
+          model: Stop,
+          as: "StopOnTier",
+          include: [{ model: Student, as: "StudentAtStop" }],
+        },
+      ],
     });
     if (!foundTierByTime) {
       return res.status(400).json({ message: "Data not found!" });
@@ -66,10 +73,7 @@ const findTierBySchool = async (req: Request, res: Response) => {
   try {
     const foundTierBySchool = await Tier.findAll({
       where: { tierAnchor_school: req.params.tierAnchor_school },
-      include: {
-        all: true,
-        nested: true,
-      },
+      include: [{ model: Stop, include: [Student] }],
     });
     if (!foundTierBySchool) {
       return res.status(400).json({ message: "Data not found!" });
@@ -97,7 +101,6 @@ const updateTier = async (req: Request, res: Response) => {
   try {
     const tierForupdate = await Tier.findOne({
       where: { tierAnchor_school, routeNumber },
-      include: [{ all: true, nested: true }],
     });
 
     if (!tierForupdate) {

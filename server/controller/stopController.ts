@@ -1,3 +1,4 @@
+import { Student } from "../Models/StudentModels.js";
 import { MainDriver } from "../Models/MainDriverModel.js";
 import { Package } from "../Models/PackageModel.js";
 import { Stop } from "../Models/StopModel.js";
@@ -6,7 +7,7 @@ import { Request, Response } from "express";
 
 const createStop = async (req: Request, res: Response) => {
   const {
-    tier_id,
+    tierId,
     stopName,
     stopAddress,
     destinationAddress,
@@ -18,7 +19,7 @@ const createStop = async (req: Request, res: Response) => {
 
   try {
     const createdStop = await Stop.create({
-      tier_id,
+      tierId,
       stopName,
       stopAddress,
       destinationAddress,
@@ -26,9 +27,6 @@ const createStop = async (req: Request, res: Response) => {
       dropoffTime_home,
       pickupTime_school,
       dropoffTime_school,
-      include: {
-        model: [Tier],
-      },
     });
     res.status(200).json(createdStop);
   } catch (error) {
@@ -39,13 +37,11 @@ const createStop = async (req: Request, res: Response) => {
 
 const findStop = async (req: Request, res: Response) => {
   try {
-    const foundStop = await Stop.findAll({
+    const foundStop = await Stop.findOne({
+      where: { id: req.params.id },
       include: [
-        Tier,
-        {
-          model: MainDriver,
-        },
-        Package,
+        { model: Package, include: [{ model: Tier, as: "StopOnTier" }] },
+        { model: Student, as: "StudentAtStop" },
       ],
     });
 
@@ -69,21 +65,21 @@ const updateStop = async (req: Request, res: Response) => {
     dropoffTime_school,
   } = req.body;
   try {
-    const stopForUpdate = await Stop.findOne({
-      where: { id: req.params.id },
-      include: [Package, Tier, MainDriver],
-    });
+    const stopForUpdate = await Stop.update(
+      {
+        stopName,
+        stopAddress,
+        pickupTime_home,
+        dropoffTime_home,
+        pickupTime_school,
+        dropoffTime_school,
+      },
+      { where: { id: req.params.id } }
+    );
     if (!stopForUpdate) {
       return res.status(400).json({ message: "Data not found!" });
     }
-    await stopForUpdate.update({
-      stopName,
-      stopAddress,
-      pickupTime_home,
-      dropoffTime_home,
-      pickupTime_school,
-      dropoffTime_school,
-    });
+
     res.status(200).json({ messge: "Stop successfully updated." });
   } catch (error) {
     console.error("Error occured while updating a stop.", error);

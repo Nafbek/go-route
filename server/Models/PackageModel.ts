@@ -3,10 +3,9 @@ import { sequelize } from "../config/connection.js";
 
 class Package extends Model {
   public id!: number;
-  public driverId!: number | null;
-  public packageName!: string;
+  public driverId!: number;
+  public districtName!: string;
   public packageNumber!: string;
-  public routeDescription!: string | null;
   public packageDescription!: string | null;
 }
 
@@ -30,13 +29,11 @@ Package.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // routeNumber: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    // },
+
     packageNumber: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     packageDescription: {
       type: DataTypes.TEXT,
