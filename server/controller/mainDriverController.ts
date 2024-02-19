@@ -90,6 +90,8 @@ const findAllDriversBySchool = async (req: Request, res: Response) => {
         },
       ],
       where: { tierAnchor_school: tierAnchor_school },
+      // offset: 10,
+      // limit:6
     });
     if (!foundAllDriversBySchool) {
       return res.status(400).json({ message: "Data not found!" });

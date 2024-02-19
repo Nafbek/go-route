@@ -6,17 +6,12 @@ import { Student } from "../Models/StudentModels.js";
 
 // Create package with
 const createPackageInfo = async (req: Request, res: Response) => {
-  const {
-    packageName,
-    packageNumber,
-    districtName,
-    packageDescription,
-    driverId,
-  } = req.body;
+  const { packageNumber, districtName, packageDescription, driverId } =
+    req.body;
   try {
     const createdPackageInfo = await Package.create({
       driverId,
-      packageName,
+
       packageNumber,
       districtName,
       packageDescription,

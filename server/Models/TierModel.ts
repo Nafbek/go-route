@@ -41,7 +41,7 @@ Tier.init(
     },
     routeNumber: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     shift: {
       type: DataTypes.STRING,

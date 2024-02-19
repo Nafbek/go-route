@@ -1,8 +1,8 @@
 import { Response, Request } from "express";
 import { Student } from "../Models/StudentModels.js";
-import { Package } from "Models/PackageModel.js";
-import { Tier } from "Models/TierModel.js";
-import { Stop } from "Models/StopModel.js";
+import { Package } from "../Models/PackageModel.js";
+import { Tier } from "../Models/TierModel.js";
+import { Stop } from "../Models/StopModel.js";
 
 const createStudent = async (req: Request, res: Response) => {
   const { stopId, studentFirstName, studentLastName, studentContactNumber } =
