@@ -1,3 +1,5 @@
+console.log("dirname", __dirname);
+
 import { MainDriver } from "../Models/MainDriverModel.js";
 import { Package } from "../Models/PackageModel.js";
 import { Stop } from "../Models/StopModel.js";
@@ -6,7 +8,7 @@ import { Tier } from "../Models/TierModel.js";
 import fs from "fs";
 
 //Read the data synchronously and parse it
-const driverRawData = fs.readFileSync(".dist/driverSeed.json", "utf-8");
+const driverRawData = fs.readFileSync("../seeds/driverSeed.json", "utf-8");
 const driverData = JSON.parse(driverRawData);
 
 //Define an asynchronous function for bulk insertion
@@ -21,7 +23,7 @@ const bulkCreateDriver = async () => {
 };
 
 //Read the data synchronously and parse it
-const packageRawData = fs.readFileSync("./packageSeed.json", "utf-8");
+const packageRawData = fs.readFileSync("../seeds/packageSeed.json", "utf-8");
 const packageData = JSON.parse(packageRawData);
 
 //Define an asynchronous function for bulk insertion
@@ -35,7 +37,7 @@ const bulkCreatePackage = async () => {
 };
 
 //Read the data synchronously and parse it
-const tierRawData = fs.readFileSync("./tierSeed.json", "utf-8");
+const tierRawData = fs.readFileSync("../seeds/tierSeed.json", "utf-8");
 const tierData = JSON.parse(tierRawData);
 
 //Define an asynchronous function for bulk insertion
@@ -49,7 +51,7 @@ const bulkCreateTier = async () => {
 };
 
 //Read the data synchronously and parse it
-const stopRawData = fs.readFileSync("./stopSeed.json", "utf-8");
+const stopRawData = fs.readFileSync("../seeds/stopSeed.json", "utf-8");
 const stopData = JSON.parse(stopRawData);
 
 //Define an asynchronous function for bulk insertion
@@ -63,7 +65,7 @@ const bulkCreateStop = async () => {
 };
 
 //Read the data synchronously and parse it
-const studentRawData = fs.readFileSync("./studentSeed.json", "utf-8");
+const studentRawData = fs.readFileSync("../seeds/studentSeed.json", "utf-8");
 const studentData = JSON.parse(studentRawData);
 
 //Define an asynchronous function for bulk insertion

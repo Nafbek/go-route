@@ -22,7 +22,13 @@ const createMainDriver = async (req: Request, res: Response) => {
       driverContactNumber,
       driverSecondContactNumber,
     });
-    res.status(200).json(newDriver);
+    const passcode: string = newDriver.passcode;
+
+    res.status(200).json({
+      driver: newDriver,
+      passcode: passcode,
+      message: "Driver created successfully",
+    });
   } catch (error) {
     console.error("Error occured while creating driver data.", error);
     res.status(500).json({ message: "Server error." });

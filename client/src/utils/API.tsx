@@ -14,7 +14,7 @@ interface MainDriverApi {
 }
 
 const MainDriverApi: MainDriverApi = {
-  createMainDriver: async (data) => {
+  createMainDriver: async (data: any): Promise<string> => {
     console.log(data);
     try {
       console.log("Req. url", `${API_BASE_URL}/api/driver`);
@@ -22,7 +22,7 @@ const MainDriverApi: MainDriverApi = {
         headers: { "Content-Type": "application/json" },
       });
 
-      return response.data;
+      return response.data.passcode as string;
     } catch (error) {
       console.error("Server error occured", error);
       throw error;

@@ -2,40 +2,50 @@
 [
     {
         "id": 1,
-        "tier_id": 9,
+        "tierId": 9,
         "stopName": "a",
         "stopAddress": "321 36th ave n",
-        "pickDropTime_home": "7:20am",
-        "pickDropTime_school": "8:15am",
-        "destinationAddress": "1345 zane ave n"
+        "pickupTime_home": "7:20am",
+        "dropoffTime_school": "8:15am",
+        "destinationAddress": "1345 zane ave n",
+"pickupTime_shool": "1:55",
+"dropoffTime_home": "2:50"
     },
     {
         "id": 2,
-        "tier_id": 10,
+        "tierId": 10,
         "stopName": "b",
         "stopAddress": "890 26th ave n",
-        "pickDropTime_home": "7:34am",
-        "pickDropTime_school": "8:15am",
-        "destinationAddress": "1345 zane ave n"
+        "pickupTime_home": "7:34am",
+        "dropoffTime_school": "8:15am",
+        "destinationAddress": "1345 zane ave n",
+        "pickupTime_shool": "2:55",
+        "dropoffTime_home": "3:30"
     },
 
     {
         "id": 3,
-        "tier_id": 11,
+        "tierId": 11,
         "stopName": "a",
         "stopAddress": "321 36th ave n",
-        "pickDropTime_home": "2:45pm",
-        "pickDropTime_school": "1:55pm",
-        "destinationAddress": "1345 zane ave n"
+        "pickupTime_home": "2:45pm",
+        "dropoffTime_school": "1:55pm",
+        "destinationAddress": "1345 zane ave n",
+        "pickupTime_shool": "1:55",
+"dropoffTime_home": "2:50"
+
     },
     {
         "id": 4,
-        "tier_id": 12,
+        "tierId": 12,
         "stopName": "b",
         "stopAddress": "890 26th ave n",
-        "pickDropTime_home": "2:25pm",
-        "pickDropTime_school": "1:55pm",
-        "destinationAddress": "1345 zane ave n"
+        "pickupTime_home": "2:25pm",
+        "dropoffTime_school": "1:55pm",
+        "destinationAddress": "1345 zane ave n",
+        "pickupTime_shool": "1:55",
+"dropoffTime_home": "2:50"
+
     }
 
 

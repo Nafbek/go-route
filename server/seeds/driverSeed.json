@@ -5,8 +5,8 @@
         "driverFirstName": "Mentesinot",
         "driverLastName": "T.",
         "driverContactNumber": "459803749",
-        "driverSecondContactNumber": "23194858273",
-        "password": "323556fd"
+        "driverSecondContactNumber": "23194858273"
+    
         
     },
     {
@@ -14,16 +14,16 @@
         "driverFirstName": "Antonio",
         "driverLastName": "C.",
         "driverContactNumber": "456437749",
-        "driverSecondContactNumber": "45948582453",
-        "password": "3yt896fd"
+        "driverSecondContactNumber": "45948582453"
+  
     },
     {
         "id": 3,
         "driverFirstName": "Nuria",
         "driverLastName": "M.",
         "driverContactNumber": "985803642",
-        "driverSecondContactNumber": "705390374",
-        "password": "0987654"
+        "driverSecondContactNumber": "705390374"
+     
     }
 
     

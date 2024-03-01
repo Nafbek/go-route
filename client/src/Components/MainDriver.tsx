@@ -1,14 +1,22 @@
 import { useState } from "react";
 import { MainDriverApi } from "../utils/API";
 
+interface ApiResponse {
+  passcode: any;
+  driverFirstName: string;
+  driverSecondName: string;
+  driverContactNumber: string;
+  driverSecondContactNumber: string;
+}
+
 export default function MainDriver() {
   const [formSubmissionStatus, setFormSubmissionStatus] = useState("");
+  const [passcode, setPasscode] = useState("");
   const [driverFormData, setDriverFormData] = useState({
     driverFirstName: "",
     driverSecondName: "",
     driverContactNumber: "",
     driverSecondContactNumber: "",
-    password: "",
   });
 
   const handleInputChange = (e: any) => {
@@ -37,9 +45,10 @@ export default function MainDriver() {
           driverSecondName: "",
           driverContactNumber: "",
           driverSecondContactNumber: "",
-          password: "",
         });
         setFormSubmissionStatus("Form submitted successfully.");
+
+        setPasscode(response);
       }
     } catch (error) {
       console.log("Server Error occured while submitting driver's data.");
@@ -100,7 +109,7 @@ export default function MainDriver() {
               onChange={handleInputChange}
             />
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="password">Password:</label>
             <input
               type="text"
@@ -110,11 +119,13 @@ export default function MainDriver() {
               className=""
               onChange={handleInputChange}
             />
-          </div>
+          </div> */}
           <button type="submit">Submit form</button>
         </form>
 
         {formSubmissionStatus && <p>{formSubmissionStatus}</p>}
+        <p> {driverFormData.driverFirstName}</p>
+        {passcode && <p>Your passcode is:{passcode}</p>}
       </div>
     </>
   );

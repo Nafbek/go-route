@@ -1,14 +1,14 @@
 [
     {
         "id": 1,
-        "stop_id": 2,
+        "stopId": 2,
         "studentFirstName": "Gorge",
         "studentLastName": "B.",
         "studentContactNumber": "7023629349"
     },
     {
         "id": 2,
-        "stop_id": 3,
+        "stopId": 3,
         "studentFirstName": "Spencer",
         "studentLastName": "Dun",
         "studentContactNumber": "98460123"
@@ -16,7 +16,7 @@
 
     {
         "id": 3,
-        "stop_id": 2,
+        "stopId": 2,
         "studentFirstName": "Bella",
         "studentLastName": "B.",
         "studentContactNumber": "7023629349"
@@ -24,7 +24,7 @@
 
     {
         "id": 4,
-        "stop_id": 4,
+        "stopId": 4,
         "studentFirstName": "Markyala",
         "studentLastName": " John",
         "studentContactNumber": "7846302233"
@@ -32,7 +32,7 @@
 
     {
         "id": 5,
-        "stop_id": 1,
+        "stopId": 1,
         "studentFirstName": "Brionna",
         "studentLastName": "S.",
         "studentContactNumber": "46701254"

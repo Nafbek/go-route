@@ -8,20 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Package } from "../Models/PackageModel.js";
+import { Tier } from "../Models/TierModel.js";
+import { Stop } from "../Models/StopModel.js";
+import { Student } from "../Models/StudentModels.js";
 // Create package with
 const createPackageInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { packageName, packageNumber, districtName, packageDescription, driverId, } = req.body;
+    const { packageNumber, districtName, packageDescription, driverId } = req.body;
     try {
         const createdPackageInfo = yield Package.create({
             driverId,
-            packageName,
             packageNumber,
             districtName,
             packageDescription,
-            include: {
-                all: true,
-                nested: true,
-            },
+            // include: {
+            //   all: true,
+            //   nested: true,
+            // },
         });
         res.status(200).json(createdPackageInfo);
     }
@@ -47,10 +49,18 @@ const findSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const { packageNumber } = req.params;
     try {
         const foundPackage = yield Package.findOne({
-            include: {
-                all: true,
-                nested: true,
-            },
+            include: [
+                {
+                    model: Tier,
+                    include: [
+                        {
+                            model: Stop,
+                            as: "stopOnTier",
+                            include: [{ model: Student, as: "studentAtStop" }],
+                        },
+                    ],
+                },
+            ],
             where: {
                 packageNumber: packageNumber,
             },
@@ -65,36 +75,6 @@ const findSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ message: "Server error." });
     }
 });
-// const updatePackage = async (req: Request, res: Response) => {
-//   const { driverId, districtName, packageNumber, packageDescription } =
-//     req.body;
-//   try {
-//     const [affectedRow, packageForUpdate] = await Package.update(
-//       { driverId, districtName, packageNumber, packageDescription },
-//       {
-//         where: { packageNumber },
-//         returning: true,
-//         logging: console.log,
-//       }
-//     );
-//     if (
-//       affectedRow === 0 ||
-//       !packageForUpdate ||
-//       packageForUpdate.length === 0
-//     ) {
-//       return res
-//         .status(400)
-//         .json({ message: "Data not found for the update!" });
-//     }
-//     const updatedPackage = packageForUpdate[0];
-//     res
-//       .status(200)
-//       .json({ message: "Package successfully updated.", updatedPackage });
-//   } catch (error) {
-//     console.error("Error occured while updating package.", error);
-//     res.status(500).json({ message: "Server error." });
-//   }
-// };
 const updatePackage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { driverId, districtName, packageNumber, packageDescription } = req.body;
     try {
@@ -116,7 +96,6 @@ const updatePackage = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 const deleteSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const { id, packageNumber } = req.body;
     try {
         const packageForDeletion = yield Package.destroy({
             where: {

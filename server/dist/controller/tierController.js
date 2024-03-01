@@ -7,15 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { Student } from "../Models/StudentModels.js";
+import { Stop } from "../Models/StopModel.js";
 import { Tier } from "../Models/TierModel.js";
+import { Package } from "../Models/PackageModel.js";
 //Create a tier with all associations
 const createTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tierAnchor_school, schoolContactNumber, package_id, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, } = req.body;
+    const { tierAnchor_school, schoolContactNumber, packageId, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, } = req.body;
     try {
         const createdTier = yield Tier.create({
             tierAnchor_school,
             schoolContactNumber,
-            package_id,
+            packageId,
             routeNumber,
             shift,
             timeStart,
@@ -23,10 +26,6 @@ const createTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             totalRiders,
             runningDays,
             totalMiles,
-            include: {
-                all: true,
-                nested: true,
-            },
         });
         if (!createdTier) {
             return res.status(400).json();
@@ -38,55 +37,61 @@ const createTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ message: "Server error. Try again!" });
     }
 });
-const findTierByTime = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// const findTierByTime = async (req: Request, res: Response) => {
+//   try {
+//     const foundTierByTime = await Tier.findAndCountAll({
+//       where: { timeStart: req.params.timeStart },
+//       // include: [
+//       //   { model: Package },
+//       //   {
+//       //     model: Stop,
+//       //     as: "StopOnTier",
+//       //     include: [{ model: Student, as: "StudentAtStop" }],
+//       //   },
+//       // ],
+//     });
+//     if (!foundTierByTime) {
+//       return res.status(400).json({ message: "Data not found!" });
+//     }
+//     res.status(200).json(foundTierByTime);
+//   } catch (error) {
+//     console.error("Error occured while finding tier by time.");
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+const findTierBySchoolOrRouteNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { routeNumber, tierAnchor_school } = req.params;
+    console.log("Route number is: ", routeNumber);
     try {
-        const foundTierByTime = yield Tier.findAll({
-            where: { timeStart: req.params.timeStart },
-            include: {
-                all: true,
-                nested: true,
-            },
+        const foundTierBySchoolOrRouteNumber = yield Tier.findAndCountAll({
+            where: { routeNumber, tierAnchor_school },
+            include: [
+                { model: Package },
+                {
+                    model: Stop,
+                    as: "StopOnTier",
+                    include: [{ model: Student, as: "StudentAtStop" }],
+                },
+            ],
+            // offset: 10,
+            // limit: 6,
         });
-        if (!foundTierByTime) {
+        if (!foundTierBySchoolOrRouteNumber ||
+            foundTierBySchoolOrRouteNumber.rows.length === 0) {
             return res.status(400).json({ message: "Data not found!" });
         }
-        res.status(200).json(foundTierByTime);
+        res.status(200).json([foundTierBySchoolOrRouteNumber]);
     }
     catch (error) {
-        console.error("Error occured while finding tier by time.");
-        res.status(500).json({ message: "Server error" });
-    }
-});
-const findTierBySchool = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const foundTierBySchool = yield Tier.findAll({
-            where: { tierAnchor_school: req.params.tierAnchor_school },
-            include: {
-                all: true,
-                nested: true,
-            },
-        });
-        if (!foundTierBySchool) {
-            return res.status(400).json({ message: "Data not found!" });
-        }
-        res.status(200).json(foundTierBySchool);
-    }
-    catch (error) {
-        console.error("Error coccured while finding route/tier by school.");
+        console.error("Error coccured while finding route/tier by school or route number.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
 const updateTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tierAnchor_school, schoolContactNumber, package_id, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, } = req.body;
     try {
-        const tierForupdate = yield Tier.findOne({
-            where: { tierAnchor_school, routeNumber },
-            include: [{ all: true, nested: true }],
-        });
-        if (!tierForupdate) {
-            return res.status(400).json({ message: "Data not found!" });
-        }
-        yield tierForupdate.update({
+        // const {tierAnchor_school, routenumber} = req.params,
+        const tierForupdate = yield Tier.update({
             tierAnchor_school,
             schoolContactNumber,
             package_id,
@@ -97,30 +102,33 @@ const updateTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             totalRiders,
             runningDays,
             totalMiles,
-        });
+        }, { where: { id: req.params.id } });
+        if (!tierForupdate) {
+            return res
+                .status(400)
+                .json({ message: "Data not found to make an update!" });
+        }
         res.status(200).json({ message: "Route/tier successfully updated." });
     }
     catch (error) {
-        console.error("Error occured while updating route/tier.");
+        console.error("Error occured while updating route/tier.", error);
         res.status(500).json({ messge: "Server error." });
     }
 });
 const deleteRouteTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tierAnchor_school, routeNumber, } = req.body;
     try {
-        const tierForupdate = yield Tier.findOne({
-            where: { tierAnchor_school, routeNumber },
-            include: [{ all: true, nested: true }],
+        const tierForDeletion = yield Tier.destroy({
+            where: { id: req.params.id },
+            // include: [{model: Stop, include:[Student]}],
         });
-        if (!tierForupdate) {
+        if (!tierForDeletion) {
             return res.status(400).json({ message: "Data not found!" });
         }
-        yield tierForupdate.destroy();
         res.status(200).json({ message: "Route/tier successfully deleted." });
     }
     catch (error) {
-        console.error("Error occured while deleting route/tier.");
+        console.error("Error occured while deleting route/tier.", error);
         res.status(500).json({ messge: "Server error." });
     }
 });
-export { createTier, findTierBySchool, findTierByTime, updateTier, deleteRouteTier, };
+export { createTier, findTierBySchoolOrRouteNumber, updateTier, deleteRouteTier, };

@@ -7,15 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MainDriver } from "../Models/MainDriverModel.js";
+import { Student } from "../Models/StudentModels.js";
 import { Package } from "../Models/PackageModel.js";
 import { Stop } from "../Models/StopModel.js";
 import { Tier } from "../Models/TierModel.js";
 const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tier_id, stopName, stopAddress, destinationAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
+    const { tierId, stopName, stopAddress, destinationAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
     try {
         const createdStop = yield Stop.create({
-            tier_id,
+            tierId,
             stopName,
             stopAddress,
             destinationAddress,
@@ -23,9 +23,6 @@ const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             dropoffTime_home,
             pickupTime_school,
             dropoffTime_school,
-            include: {
-                model: [Tier],
-            },
         });
         res.status(200).json(createdStop);
     }
@@ -36,13 +33,11 @@ const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const foundStop = yield Stop.findAll({
+        const foundStop = yield Stop.findOne({
+            where: { id: req.params.id },
             include: [
-                Tier,
-                {
-                    model: MainDriver,
-                },
-                Package,
+                { model: Package, include: [{ model: Tier, as: "StopOnTier" }] },
+                { model: Student, as: "StudentAtStop" },
             ],
         });
         if (!foundStop) {
@@ -58,21 +53,17 @@ const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { stopName, stopAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
     try {
-        const stopForUpdate = yield Stop.findOne({
-            where: { id: req.params.id },
-            include: [Package, Tier, MainDriver],
-        });
-        if (!stopForUpdate) {
-            return res.status(400).json({ message: "Data not found!" });
-        }
-        yield stopForUpdate.update({
+        const stopForUpdate = yield Stop.update({
             stopName,
             stopAddress,
             pickupTime_home,
             dropoffTime_home,
             pickupTime_school,
             dropoffTime_school,
-        });
+        }, { where: { id: req.params.id } });
+        if (!stopForUpdate) {
+            return res.status(400).json({ message: "Data not found!" });
+        }
         res.status(200).json({ messge: "Stop successfully updated." });
     }
     catch (error) {

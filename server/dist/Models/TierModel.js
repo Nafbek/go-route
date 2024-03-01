@@ -17,7 +17,7 @@ Tier.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
-    package_id: {
+    packageId: {
         type: DataTypes.INTEGER,
         references: {
             model: "package",
@@ -27,7 +27,7 @@ Tier.init({
     },
     routeNumber: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     shift: {
         type: DataTypes.STRING,

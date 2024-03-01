@@ -71,14 +71,14 @@ const findTierBySchoolOrRouteNumber = async (req: Request, res: Response) => {
   try {
     const foundTierBySchoolOrRouteNumber = await Tier.findAndCountAll({
       where: { routeNumber, tierAnchor_school },
-      // include: [
-      //   { model: Package },
-      //   {
-      //     model: Stop,
-      //     as: "StopOnTier",
-      //     include: [{ model: Student, as: "StudentAtStop" }],
-      //   },
-      // ],
+      include: [
+        { model: Package },
+        {
+          model: Stop,
+          as: "StopOnTier",
+          include: [{ model: Student, as: "StudentAtStop" }],
+        },
+      ],
       // offset: 10,
       // limit: 6,
     });

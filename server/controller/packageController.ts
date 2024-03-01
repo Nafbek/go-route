@@ -48,7 +48,13 @@ const findSinglePackage = async (req: Request, res: Response) => {
       include: [
         {
           model: Tier,
-          include: [{ model: Stop, include: [Student] }],
+          include: [
+            {
+              model: Stop,
+              as: "stopOnTier",
+              include: [{ model: Student, as: "studentAtStop" }],
+            },
+          ],
         },
       ],
       where: {

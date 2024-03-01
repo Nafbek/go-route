@@ -9,7 +9,7 @@ Stop.init({
         autoIncrement: true,
         primaryKey: true,
     },
-    tier_id: {
+    tierId: {
         type: DataTypes.INTEGER,
         references: {
             model: "tier",

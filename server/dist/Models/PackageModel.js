@@ -23,6 +23,7 @@ Package.init({
     packageNumber: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
     },
     packageDescription: {
         type: DataTypes.TEXT,

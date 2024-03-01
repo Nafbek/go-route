@@ -42,7 +42,7 @@ MainDriver.init(
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: function () {
-        const passcodeRandom = Math.random().toString(36).slice(-6);
+        const passcodeRandom = Math.random().toString(36).slice(-5);
         return passcodeRandom;
       },
     },

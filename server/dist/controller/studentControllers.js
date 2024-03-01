@@ -8,10 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Student } from "../Models/StudentModels.js";
+import { Package } from "../Models/PackageModel.js";
+import { Tier } from "../Models/TierModel.js";
+import { Stop } from "../Models/StopModel.js";
 const createStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { studentFirstName, studentLastName, studentContactNumber } = req.body;
+    const { stopId, studentFirstName, studentLastName, studentContactNumber } = req.body;
     try {
         const createdStudent = yield Student.create({
+            stopId,
             studentFirstName,
             studentLastName,
             studentContactNumber,
@@ -25,7 +29,18 @@ const createStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 const findSingleStudent = (res, req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const foundSingleStudent = yield Student.findByPk();
+        const { id } = req.params;
+        const foundSingleStudent = yield Student.findOne({
+            include: [
+                {
+                    model: Package,
+                    include: [
+                        { model: Tier, include: [{ model: Stop, as: "StudentAtStop" }] },
+                    ],
+                },
+            ],
+            where: { id: id },
+        });
         if (!foundSingleStudent) {
             return res.status(400).json({ message: "Data not found!" });
         }
@@ -41,12 +56,6 @@ const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const studentForUpdate = yield Student.findOne({
             where: { id: req.params.id },
-            include: [
-                {
-                    all: true,
-                    nested: true,
-                },
-            ],
         });
         if (!studentForUpdate) {
             return res.status(400).json({ message: "Data not found!" });
@@ -67,7 +76,6 @@ const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const studentForDeletion = yield Student.findOne({
             where: { id: req.params.id },
-            include: [{ all: true, nested: true }],
         });
         if (!studentForDeletion) {
             return res.status(400).json({ message: "Data not found!" });
