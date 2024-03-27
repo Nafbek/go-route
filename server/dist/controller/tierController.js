@@ -80,7 +80,7 @@ const findTierBySchoolOrRouteNumber = (req, res) => __awaiter(void 0, void 0, vo
             foundTierBySchoolOrRouteNumber.rows.length === 0) {
             return res.status(400).json({ message: "Data not found!" });
         }
-        res.status(200).json([foundTierBySchoolOrRouteNumber]);
+        res.status(200).json([foundTierBySchoolOrRouteNumber.rows]);
     }
     catch (error) {
         console.error("Error coccured while finding route/tier by school or route number.", error);

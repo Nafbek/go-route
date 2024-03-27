@@ -38,15 +38,9 @@ const createMainDriver = async (req: Request, res: Response) => {
 //find all drivers with complete package
 const findAllDrivers = async (req: Request, res: Response) => {
   try {
-    const foundAllDrivers = await MainDriver
-      .findAll
-      //   {
-
-      //   logging: console.log,
-      // }
-      ();
+    const foundAllDrivers = await MainDriver.findAll();
     console.log("Drivers found: ", foundAllDrivers);
-    if (!foundAllDrivers) {
+    if (!foundAllDrivers || foundAllDrivers.length === 0) {
       return res.status(400).json({ message: "Data not found!" });
     }
     res.status(200).json(foundAllDrivers);
@@ -66,7 +60,16 @@ const findSingleMainDriver = async (req: Request, res: Response) => {
         {
           model: Package,
           include: [
-            { model: Tier, include: [{ model: Stop, include: [Student] }] },
+            {
+              model: Tier,
+              include: [
+                {
+                  model: Stop,
+                  as: "StopOnTier",
+                  include: [{ model: Student, as: "StudentAtStop" }],
+                },
+              ],
+            },
           ],
         },
       ],
@@ -91,11 +94,20 @@ const findAllDriversBySchool = async (req: Request, res: Response) => {
         {
           model: Package,
           include: [
-            { model: Tier, include: [{ model: Stop, include: [Student] }] },
+            {
+              model: Tier,
+              include: [
+                {
+                  model: Stop,
+                  as: "StopOnTier",
+                  include: [{ model: Student, as: "StudentAtStop" }],
+                },
+              ],
+              where: { tierAnchor_school: tierAnchor_school },
+            },
           ],
         },
       ],
-      where: { tierAnchor_school: tierAnchor_school },
       // offset: 10,
       // limit:6
     });

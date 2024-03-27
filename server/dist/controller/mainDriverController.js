@@ -23,7 +23,12 @@ const createMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, functio
             driverContactNumber,
             driverSecondContactNumber,
         });
-        res.status(200).json(newDriver);
+        const passcode = newDriver.passcode;
+        res.status(200).json({
+            driver: newDriver,
+            passcode: passcode,
+            message: "Driver created successfully",
+        });
     }
     catch (error) {
         console.error("Error occured while creating driver data.", error);
@@ -36,7 +41,7 @@ const findAllDrivers = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const foundAllDrivers = yield MainDriver
             .findAll();
         console.log("Drivers found: ", foundAllDrivers);
-        if (!foundAllDrivers) {
+        if (!foundAllDrivers || foundAllDrivers.length === 0) {
             return res.status(400).json({ message: "Data not found!" });
         }
         res.status(200).json(foundAllDrivers);

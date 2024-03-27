@@ -11,14 +11,9 @@ const createPackageInfo = async (req: Request, res: Response) => {
   try {
     const createdPackageInfo = await Package.create({
       driverId,
-
       packageNumber,
       districtName,
       packageDescription,
-      // include: {
-      //   all: true,
-      //   nested: true,
-      // },
     });
 
     res.status(200).json(createdPackageInfo);
@@ -45,6 +40,9 @@ const findSinglePackage = async (req: Request, res: Response) => {
   const { packageNumber } = req.params;
   try {
     const foundPackage = await Package.findOne({
+      where: {
+        packageNumber: packageNumber,
+      },
       include: [
         {
           model: Tier,
@@ -57,9 +55,6 @@ const findSinglePackage = async (req: Request, res: Response) => {
           ],
         },
       ],
-      where: {
-        packageNumber: packageNumber,
-      },
     });
 
     if (!foundPackage) {

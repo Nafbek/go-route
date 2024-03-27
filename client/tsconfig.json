@@ -19,9 +19,11 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
-    "outDir": "./build"
+    "outDir": "./build",
+    "types": ["react", "react-dom", "react-bootstrap"],
   },
   "include": [
-    "src"
+    "src",
+    "node_modules/react-bootstrap"
   ]
 }

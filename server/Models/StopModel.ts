@@ -3,6 +3,7 @@ import { sequelize } from "../config/connection.js";
 
 class Stop extends Model {
   public id!: number;
+  public tierId!: number;
   public stopName!: string | null;
   public stopAddress!: string;
   public pickupTime_home!: Date;

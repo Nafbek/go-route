@@ -12,7 +12,7 @@ Package.init({
     driverId: {
         type: DataTypes.INTEGER,
         references: {
-            model: "mainDriver",
+            model: "maindriver",
             key: "id",
         },
     },

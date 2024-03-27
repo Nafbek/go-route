@@ -7,35 +7,35 @@ export default function Home() {
     driverContactNumber: "",
     driverSecondContactNumber: "",
     passcode: "",
-    password: ""
-
+    password: "",
   });
   return (
     <>
       <div>
-        <h2>Sign in</h2>
-        <form>
-          <div>
-            <label>Get a registrtion code from dispatch to sign in!</label>
-            <input
-              type="text"
-              name="firstName"
-              required
-              placeholder="first name"
-            />
-            <input
-              type="text"
-              name="lastName"
-              required
-              placeholder="last name"
-            />
-            <input
-              type="text"
-              name="passcode"
-              required
-              placeholder="your registration code"
-            />
-            <input
+        <div className="container">
+          <h2>Sign in</h2>
+          <form>
+            <div>
+              <label>Get a registrtion code from dispatch to sign in!</label>
+              <input
+                type="text"
+                name="firstName"
+                required
+                placeholder="first name"
+              />
+              <input
+                type="text"
+                name="lastName"
+                required
+                placeholder="last name"
+              />
+              <input
+                type="text"
+                name="passcode"
+                required
+                placeholder="your registration code"
+              />
+              {/* <input
               type="text"
               name="password"
               required
@@ -45,10 +45,17 @@ export default function Home() {
               type="text"
               name="confirmPassword"
               placeholder="re-type your password"
-            />
-          </div>
-          <button type="submit">Sign in</button>
-        </form>
+            /> */}
+            </div>
+            <button type="submit">Sign in</button>
+          </form>
+        </div>
+
+        <div className="container">
+          <h3>Create</h3>
+          <h3>Modify</h3>
+          <h3>Remove</h3>
+        </div>
       </div>
     </>
   );

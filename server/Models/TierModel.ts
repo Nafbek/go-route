@@ -3,7 +3,7 @@ import { sequelize } from "../config/connection.js";
 
 class Tier extends Model {
   public id!: number;
-  public package_id!: number | null;
+  public packageId!: number | null;
   public tierAnchor_school!: string | null;
   public shift!: string;
   public schoolContactNumber!: string | null;

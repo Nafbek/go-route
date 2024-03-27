@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { PackageApi } from "../utils/PackageAPI";
+import Tier from "./Tier";
+import Stop from "./Stop";
+import Student from "./Student";
+import MainDriver from "./MainDriver";
+import { useSearchContext } from "./DispatcherGate";
 
 export default function Package() {
+  // const { searchResults } = useSearchContext();
+
   const [packageInfo, setPackageInfo] = useState({
     districtName: "",
     packageNumber: "",
@@ -37,6 +44,9 @@ export default function Package() {
   return (
     <>
       <div>
+        <MainDriver />
+      </div>
+      <div>
         <h2>Package Info</h2>
         <form onSubmit={handleSubmitForm}>
           <div>
@@ -70,6 +80,10 @@ export default function Package() {
         </form>
         {infoSavingStatus && <p>{infoSavingStatus}</p>}
       </div>
+
+      <Tier />
+      <Stop />
+      <Student />
     </>
   );
 }

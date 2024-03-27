@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../config/connection.js";
+import * as bcrypt from "bcrypt";
 
 class MainDriver extends Model {
   public id!: number;
@@ -8,10 +9,13 @@ class MainDriver extends Model {
   public driverContactNumber!: string | null;
   public driverSecondContactNumber!: string | null;
   public passcode!: string;
+  getFullName() {
+    return [this.driverFirstName, this.driverLastName].join(" ");
+  }
 
-  // getFullName() {
-  //   return [this.driverFirstName, this.driverLastName].join(" ");
-  // }
+  async isCorrectPasscode(passcode: string): Promise<boolean> {
+    return await bcrypt.compare(passcode, this.passcode);
+  }
 }
 
 MainDriver.init(
@@ -47,6 +51,7 @@ MainDriver.init(
       },
     },
   },
+
   {
     sequelize,
     timestamps: true,
@@ -57,5 +62,15 @@ MainDriver.init(
     modelName: "maindriver",
   }
 );
+
+MainDriver.beforeSave(async (maindriver) => {
+  if (maindriver.changed("passcode")) {
+    const saltRounds = 8;
+    maindriver.passcode = await bcrypt.hash(
+      maindriver.getDataValue("passcode"),
+      saltRounds
+    );
+  }
+});
 
 export { MainDriver };

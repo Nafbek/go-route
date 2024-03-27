@@ -23,7 +23,7 @@ const createStudent = async (req: Request, res: Response) => {
   }
 };
 
-const findSingleStudent = async (res: Response, req: Request) => {
+const findSingleStudent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const foundSingleStudent = await Student.findOne({
@@ -42,7 +42,7 @@ const findSingleStudent = async (res: Response, req: Request) => {
     }
     res.status(200).json(foundSingleStudent);
   } catch (error) {
-    console.error("Error occured while fetching student data.", error);
+    console.error("Error occurred while fetching student data.", error);
     res.status(500).json({ message: "Server error." });
   }
 };

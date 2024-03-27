@@ -27,7 +27,7 @@ const createStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: "Server error." });
     }
 });
-const findSingleStudent = (res, req) => __awaiter(void 0, void 0, void 0, function* () {
+const findSingleStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const foundSingleStudent = yield Student.findOne({
@@ -47,7 +47,7 @@ const findSingleStudent = (res, req) => __awaiter(void 0, void 0, void 0, functi
         res.status(200).json(foundSingleStudent);
     }
     catch (error) {
-        console.error("Error occured while fetching student data.", error);
+        console.error("Error occurred while fetching student data.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
