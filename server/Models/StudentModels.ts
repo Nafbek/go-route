@@ -7,6 +7,7 @@ class Student extends Model {
   public studentFirstName!: string;
   public studentLastName!: string | null;
   public studentContactNumber!: string | null;
+  public studentDescription!: string | null;
 }
 
 Student.init(
@@ -34,6 +35,11 @@ Student.init(
     },
     studentContactNumber: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    studentDescription: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

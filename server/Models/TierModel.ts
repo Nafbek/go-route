@@ -13,6 +13,7 @@ class Tier extends Model {
   public totalRiders!: number | null;
   public runningDays!: string | null;
   public totalMiles!: number | null;
+  public routeDescription!: string | null;
 }
 
 Tier.init(

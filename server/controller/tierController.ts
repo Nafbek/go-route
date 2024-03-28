@@ -17,6 +17,7 @@ const createTier = async (req: Request, res: Response) => {
     totalRiders,
     runningDays,
     totalMiles,
+    routeDescription,
   } = req.body;
   try {
     const createdTier = await Tier.create({
@@ -30,12 +31,15 @@ const createTier = async (req: Request, res: Response) => {
       totalRiders,
       runningDays,
       totalMiles,
+      routeDescription,
     });
 
     if (!createdTier) {
-      return res.status(400).json();
+      return res.status(400).json({ message: "Unable to create route/tier." });
     }
-    res.status(200).json({ message: "Tier successfully created." });
+    res
+      .status(200)
+      .json({ message: "Tier successfully created.", createdTier });
   } catch (error) {
     console.error("Error occured while creating tier or route.", error);
     res.status(500).json({ message: "Server error. Try again!" });
@@ -65,6 +69,7 @@ const createTier = async (req: Request, res: Response) => {
 //   }
 // };
 
+// Find route/tier by school or route number
 const findTierBySchoolOrRouteNumber = async (req: Request, res: Response) => {
   const { routeNumber, tierAnchor_school } = req.params;
   console.log("Route number is: ", routeNumber);
@@ -98,6 +103,7 @@ const findTierBySchoolOrRouteNumber = async (req: Request, res: Response) => {
   }
 };
 
+// Update a single route/tier
 const updateTier = async (req: Request, res: Response) => {
   const {
     tierAnchor_school,
@@ -112,7 +118,6 @@ const updateTier = async (req: Request, res: Response) => {
     totalMiles,
   } = req.body;
   try {
-    // const {tierAnchor_school, routenumber} = req.params,
     const tierForupdate = await Tier.update(
       {
         tierAnchor_school,
@@ -142,15 +147,17 @@ const updateTier = async (req: Request, res: Response) => {
   }
 };
 
+// Delete a single route/tier
 const deleteRouteTier = async (req: Request, res: Response) => {
   try {
     const tierForDeletion = await Tier.destroy({
       where: { id: req.params.id },
-      // include: [{model: Stop, include:[Student]}],
     });
 
     if (!tierForDeletion) {
-      return res.status(400).json({ message: "Data not found!" });
+      return res
+        .status(400)
+        .json({ message: "Unable to remove the route/tier!" });
     }
 
     res.status(200).json({ message: "Route/tier successfully deleted." });

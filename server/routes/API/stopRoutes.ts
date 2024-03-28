@@ -9,6 +9,10 @@ import { Router } from "express";
 const router = Router();
 
 router.route("/stop").post(createStop);
-router.route("/stop/:id").get(findStop).put(updateStop).delete(deleteStop);
+router
+  .route("/stop/tierId:id")
+  .get(findStop)
+  .put(updateStop)
+  .delete(deleteStop);
 
 export { router };

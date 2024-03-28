@@ -18,7 +18,7 @@ const createPackageInfo = async (req: Request, res: Response) => {
 
     res.status(200).json(createdPackageInfo);
   } catch (error) {
-    console.error("Error occured while creating package.");
+    console.error("Error occured while creating package.", error);
     res.status(500).json({ message: "Server error." });
   }
 };
@@ -40,9 +40,6 @@ const findSinglePackage = async (req: Request, res: Response) => {
   const { packageNumber } = req.params;
   try {
     const foundPackage = await Package.findOne({
-      where: {
-        packageNumber: packageNumber,
-      },
       include: [
         {
           model: Tier,
@@ -53,6 +50,9 @@ const findSinglePackage = async (req: Request, res: Response) => {
               include: [{ model: Student, as: "studentAtStop" }],
             },
           ],
+          where: {
+            packageNumber: packageNumber,
+          },
         },
       ],
     });

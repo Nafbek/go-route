@@ -8,6 +8,7 @@ class Stop extends Model {
   public stopAddress!: string;
   public pickupTime_home!: Date;
   public dropoffTime_home!: Date;
+  public destinationAddress!: string;
   public pickupTime_school!: Date;
   public dropoffTime_school!: Date;
 }
@@ -36,11 +37,11 @@ Stop.init(
       allowNull: false,
     },
     pickupTime_home: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     dropoffTime_home: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     destinationAddress: {
@@ -48,11 +49,11 @@ Stop.init(
       allowNull: true,
     },
     pickupTime_school: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     dropoffTime_school: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },

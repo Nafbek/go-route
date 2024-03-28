@@ -35,7 +35,7 @@ const createMainDriver = async (req: Request, res: Response) => {
   }
 };
 
-//find all drivers with complete package
+//find all drivers with basic personal information
 const findAllDrivers = async (req: Request, res: Response) => {
   try {
     const foundAllDrivers = await MainDriver.findAll();
@@ -46,6 +46,24 @@ const findAllDrivers = async (req: Request, res: Response) => {
     res.status(200).json(foundAllDrivers);
   } catch (error) {
     console.error("Error in finding all drivers", error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+// Find a single driver with basic personal information
+const findOnlySingleDriverProfile = async (req: Request, res: Response) => {
+  const { driverFirstName } = req.params;
+  try {
+    const foundOnlySingleDriverProfile = await MainDriver.findOne({
+      where: { driverFirstName: driverFirstName },
+    });
+
+    if (!foundOnlySingleDriverProfile) {
+      return res.status(400).json({ message: "Data not found!" });
+    }
+    res.status(200).json(foundOnlySingleDriverProfile);
+  } catch (error) {
+    console.error("Error occured while fetching a driver profile.", error);
     res.status(500).json({ message: "Server error." });
   }
 };
@@ -121,38 +139,6 @@ const findAllDriversBySchool = async (req: Request, res: Response) => {
   }
 };
 
-//Find only list of all drivers with basic personal information
-// const findOnlyAllDriversProfile = async (req: Request, res: Response) => {
-//   try {
-//     const foundOnlyAllDriversProfile = await MainDriver.findAll();
-
-//     if (!foundOnlyAllDriversProfile) {
-//       return res.status(400).json({ message: "Data not found!" });
-//     }
-//     res.status(200).json(foundOnlyAllDriversProfile);
-//   } catch (error) {
-//     console.error("Error occured while fetching all drivers' profile", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
-
-const findOnlySingleDriverProfile = async (req: Request, res: Response) => {
-  const { driverFirstName } = req.params;
-  try {
-    const foundOnlySingleDriverProfile = await MainDriver.findOne({
-      where: { driverFirstName: driverFirstName },
-    });
-
-    if (!foundOnlySingleDriverProfile) {
-      return res.status(400).json({ message: "Data not found!" });
-    }
-    res.status(200).json(foundOnlySingleDriverProfile);
-  } catch (error) {
-    console.error("Error occured while fetching a driver profile.", error);
-    res.status(500).json({ message: "Server error." });
-  }
-};
-
 const updateDriver = async (req: Request, res: Response) => {
   const {
     driverFirstName,
@@ -206,10 +192,9 @@ const deleteSingleDriver = async (req: Request, res: Response) => {
 export {
   createMainDriver,
   findAllDrivers,
-  findAllDriversBySchool,
-  findSingleMainDriver,
-  // findOnlyAllDriversProfile,
   findOnlySingleDriverProfile,
+  findSingleMainDriver,
+  findAllDriversBySchool,
   updateDriver,
   deleteSingleDriver,
 };
