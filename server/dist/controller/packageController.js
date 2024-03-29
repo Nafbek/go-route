@@ -20,15 +20,11 @@ const createPackageInfo = (req, res) => __awaiter(void 0, void 0, void 0, functi
             packageNumber,
             districtName,
             packageDescription,
-            // include: {
-            //   all: true,
-            //   nested: true,
-            // },
         });
         res.status(200).json(createdPackageInfo);
     }
     catch (error) {
-        console.error("Error occured while creating package.");
+        console.error("Error occured while creating package.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -59,11 +55,11 @@ const findSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, functi
                             include: [{ model: Student, as: "studentAtStop" }],
                         },
                     ],
+                    where: {
+                        packageNumber: packageNumber,
+                    },
                 },
             ],
-            where: {
-                packageNumber: packageNumber,
-            },
         });
         if (!foundPackage) {
             return res.status(400).json({ message: "Data not found!" });

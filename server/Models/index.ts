@@ -30,7 +30,7 @@ Tier.hasMany(Stop, {
 });
 
 Stop.belongsToMany(Tier, {
-  foreignKey: "stopId",
+  foreignKey: "tierId",
   //   onDelete: "CASCADE",
   as: "StopOnTier",
   through: "StopTier",
@@ -44,7 +44,7 @@ Stop.hasMany(Student, {
 Student.belongsToMany(Stop, {
   as: "StudentAtStop",
   through: "StudentStop",
-  foreignKey: "studentId",
+  foreignKey: "stopId",
 });
 
 export { MainDriver, Package, Tier, Stop, Student };

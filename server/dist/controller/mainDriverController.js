@@ -35,11 +35,10 @@ const createMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(500).json({ message: "Server error." });
     }
 });
-//find all drivers with complete package
+//find all drivers with basic personal information
 const findAllDrivers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const foundAllDrivers = yield MainDriver
-            .findAll();
+        const foundAllDrivers = yield MainDriver.findAll();
         console.log("Drivers found: ", foundAllDrivers);
         if (!foundAllDrivers || foundAllDrivers.length === 0) {
             return res.status(400).json({ message: "Data not found!" });
@@ -48,6 +47,23 @@ const findAllDrivers = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (error) {
         console.error("Error in finding all drivers", error);
+        res.status(500).json({ message: "Server error." });
+    }
+});
+// Find a single driver with basic personal information
+const findOnlySingleDriverProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { driverFirstName } = req.params;
+    try {
+        const foundOnlySingleDriverProfile = yield MainDriver.findOne({
+            where: { driverFirstName: driverFirstName },
+        });
+        if (!foundOnlySingleDriverProfile) {
+            return res.status(400).json({ message: "Data not found!" });
+        }
+        res.status(200).json(foundOnlySingleDriverProfile);
+    }
+    catch (error) {
+        console.error("Error occured while fetching a driver profile.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -61,7 +77,16 @@ const findSingleMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 {
                     model: Package,
                     include: [
-                        { model: Tier, include: [{ model: Stop, include: [Student] }] },
+                        {
+                            model: Tier,
+                            include: [
+                                {
+                                    model: Stop,
+                                    as: "StopOnTier",
+                                    include: [{ model: Student, as: "StudentAtStop" }],
+                                },
+                            ],
+                        },
                     ],
                 },
             ],
@@ -85,11 +110,20 @@ const findAllDriversBySchool = (req, res) => __awaiter(void 0, void 0, void 0, f
                 {
                     model: Package,
                     include: [
-                        { model: Tier, include: [{ model: Stop, include: [Student] }] },
+                        {
+                            model: Tier,
+                            include: [
+                                {
+                                    model: Stop,
+                                    as: "StopOnTier",
+                                    include: [{ model: Student, as: "StudentAtStop" }],
+                                },
+                            ],
+                            where: { tierAnchor_school: tierAnchor_school },
+                        },
                     ],
                 },
             ],
-            where: { tierAnchor_school: tierAnchor_school },
             // offset: 10,
             // limit:6
         });
@@ -100,35 +134,6 @@ const findAllDriversBySchool = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
     catch (error) {
         console.error("Error occured while fetching driver by school they go to.");
-        res.status(500).json({ message: "Server error." });
-    }
-});
-//Find only list of all drivers with basic personal information
-// const findOnlyAllDriversProfile = async (req: Request, res: Response) => {
-//   try {
-//     const foundOnlyAllDriversProfile = await MainDriver.findAll();
-//     if (!foundOnlyAllDriversProfile) {
-//       return res.status(400).json({ message: "Data not found!" });
-//     }
-//     res.status(200).json(foundOnlyAllDriversProfile);
-//   } catch (error) {
-//     console.error("Error occured while fetching all drivers' profile", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
-const findOnlySingleDriverProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { driverFirstName } = req.params;
-    try {
-        const foundOnlySingleDriverProfile = yield MainDriver.findOne({
-            where: { driverFirstName: driverFirstName },
-        });
-        if (!foundOnlySingleDriverProfile) {
-            return res.status(400).json({ message: "Data not found!" });
-        }
-        res.status(200).json(foundOnlySingleDriverProfile);
-    }
-    catch (error) {
-        console.error("Error occured while fetching a driver profile.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
@@ -172,6 +177,4 @@ const deleteSingleDriver = (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(500).json({ message: "Server error." });
     }
 });
-export { createMainDriver, findAllDrivers, findAllDriversBySchool, findSingleMainDriver, 
-// findOnlyAllDriversProfile,
-findOnlySingleDriverProfile, updateDriver, deleteSingleDriver, };
+export { createMainDriver, findAllDrivers, findOnlySingleDriverProfile, findSingleMainDriver, findAllDriversBySchool, updateDriver, deleteSingleDriver, };

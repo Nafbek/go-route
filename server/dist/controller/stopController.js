@@ -7,10 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Student } from "../Models/StudentModels.js";
-import { Package } from "../Models/PackageModel.js";
 import { Stop } from "../Models/StopModel.js";
 import { Tier } from "../Models/TierModel.js";
+// Create a stop/adress
 const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tierId, stopName, stopAddress, destinationAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
     try {
@@ -24,24 +23,28 @@ const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             pickupTime_school,
             dropoffTime_school,
         });
-        res.status(200).json(createdStop);
+        res
+            .status(200)
+            .json({ message: "New stop successfully created.", createdStop });
     }
     catch (error) {
         console.error("Error occured while creating stop.", error);
         res.status(500).json({ message: "Server error." });
     }
 });
+// Find a single stop
 const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const foundStop = yield Stop.findOne({
-            where: { id: req.params.id },
             include: [
-                { model: Package, include: [{ model: Tier, as: "StopOnTier" }] },
-                { model: Student, as: "StudentAtStop" },
+                {
+                    model: Tier,
+                },
             ],
+            where: { id: req.params.id },
         });
         if (!foundStop) {
-            return res.status(400).json({ message: "Data not found!" });
+            return res.status(400).json({ message: "Address not not found!" });
         }
         res.status(200).json(foundStop);
     }
@@ -50,19 +53,22 @@ const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: "Server error." });
     }
 });
+// Update a single stop
 const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { stopName, stopAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
+    const { stopName, stopAddress, destinationAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
+    const { tierId, id } = req.params;
     try {
         const stopForUpdate = yield Stop.update({
             stopName,
             stopAddress,
+            destinationAddress,
             pickupTime_home,
             dropoffTime_home,
             pickupTime_school,
             dropoffTime_school,
-        }, { where: { id: req.params.id } });
+        }, { where: { id: id, tierId: tierId } });
         if (!stopForUpdate) {
-            return res.status(400).json({ message: "Data not found!" });
+            return res.status(400).json({ message: "Unable to update the stop!" });
         }
         res.status(200).json({ messge: "Stop successfully updated." });
     }
@@ -71,15 +77,16 @@ const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ message: "Server error." });
     }
 });
+// Delete a single stop
 const deleteStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const stopFordeletion = yield Stop.findOne({
-            where: { id: req.params.id },
+        const { id, tierId } = req.params;
+        const stopFordeletion = yield Stop.destroy({
+            where: { id: id, tierId: tierId },
         });
         if (!stopFordeletion) {
-            return res.status(400).json({ message: "Data not found!" });
+            return res.status(400).json({ message: "Unable to remove the stop!" });
         }
-        yield stopFordeletion.destroy();
         res.status(200).json({ messge: "Stop successfully removed." });
     }
     catch (error) {

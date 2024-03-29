@@ -13,7 +13,7 @@ import { Tier } from "../Models/TierModel.js";
 import { Package } from "../Models/PackageModel.js";
 //Create a tier with all associations
 const createTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tierAnchor_school, schoolContactNumber, packageId, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, } = req.body;
+    const { tierAnchor_school, schoolContactNumber, packageId, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, routeDescription, } = req.body;
     try {
         const createdTier = yield Tier.create({
             tierAnchor_school,
@@ -26,11 +26,14 @@ const createTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             totalRiders,
             runningDays,
             totalMiles,
+            routeDescription,
         });
         if (!createdTier) {
-            return res.status(400).json();
+            return res.status(400).json({ message: "Unable to create route/tier." });
         }
-        res.status(200).json({ message: "Tier successfully created." });
+        res
+            .status(200)
+            .json({ message: "Tier successfully created.", createdTier });
     }
     catch (error) {
         console.error("Error occured while creating tier or route.", error);
@@ -59,6 +62,7 @@ const createTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 //     res.status(500).json({ message: "Server error" });
 //   }
 // };
+// Find route/tier by school or route number
 const findTierBySchoolOrRouteNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { routeNumber, tierAnchor_school } = req.params;
     console.log("Route number is: ", routeNumber);
@@ -87,10 +91,10 @@ const findTierBySchoolOrRouteNumber = (req, res) => __awaiter(void 0, void 0, vo
         res.status(500).json({ message: "Server error." });
     }
 });
+// Update a single route/tier
 const updateTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tierAnchor_school, schoolContactNumber, package_id, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, } = req.body;
     try {
-        // const {tierAnchor_school, routenumber} = req.params,
         const tierForupdate = yield Tier.update({
             tierAnchor_school,
             schoolContactNumber,
@@ -115,14 +119,16 @@ const updateTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ messge: "Server error." });
     }
 });
+// Delete a single route/tier
 const deleteRouteTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tierForDeletion = yield Tier.destroy({
             where: { id: req.params.id },
-            // include: [{model: Stop, include:[Student]}],
         });
         if (!tierForDeletion) {
-            return res.status(400).json({ message: "Data not found!" });
+            return res
+                .status(400)
+                .json({ message: "Unable to remove the route/tier!" });
         }
         res.status(200).json({ message: "Route/tier successfully deleted." });
     }

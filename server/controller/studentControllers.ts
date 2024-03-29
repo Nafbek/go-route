@@ -118,9 +118,10 @@ const updateStudent = async (req: Request, res: Response) => {
 };
 // Delete a single student from the adress
 const deleteStudent = async (req: Request, res: Response) => {
+  const { id, stopId } = req.params;
   try {
     const studentForDeletion = await Student.destroy({
-      where: { id: req.params.id },
+      where: { id: id, stopId },
     });
 
     if (!studentForDeletion) {

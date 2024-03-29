@@ -11,14 +11,16 @@ import { Student } from "../Models/StudentModels.js";
 import { Package } from "../Models/PackageModel.js";
 import { Tier } from "../Models/TierModel.js";
 import { Stop } from "../Models/StopModel.js";
+// Create a student
 const createStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { stopId, studentFirstName, studentLastName, studentContactNumber } = req.body;
+    const { stopId, studentFirstName, studentLastName, studentContactNumber, studentDescription, } = req.body;
     try {
         const createdStudent = yield Student.create({
             stopId,
             studentFirstName,
             studentLastName,
             studentContactNumber,
+            studentDescription,
         });
         res.status(200).json(createdStudent);
     }
@@ -27,6 +29,7 @@ const createStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: "Server error." });
     }
 });
+// Find a single student
 const findSingleStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
@@ -51,20 +54,49 @@ const findSingleStudent = (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ message: "Server error." });
     }
 });
+// const updateStudent = async (req: Request, res: Response) => {
+//   const {
+//     stopId,
+//     studentFirstName,
+//     studentLastName,
+//     studentContactNumber,
+//     studentDescription,
+//   } = req.body;
+//   try {
+//     const studentForUpdate = await Student.findOne({
+//       where: { id: req.params.id },
+//     });
+//     if (!studentForUpdate) {
+//       return res.status(400).json({ message: "Data not found!" });
+//     }
+//     await studentForUpdate.update({
+//       stopId,
+//       studentFirstName,
+//       studentLastName,
+//       studentContactNumber,
+//       studentDescription,
+//     });
+//     res.status(200).json({ message: "Student data successfully updated." });
+//   } catch (erro) {
+//     console.error("Error occured while updating data.");
+//     res.status(500).json({ message: "Server error." });
+//   }
+// };
+// Update student data
 const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { studentFirstName, studentLastName, studentContactNumber } = req.body;
+    const { stopId, studentFirstName, studentLastName, studentContactNumber, studentDescription, } = req.body;
+    const { id } = req.params;
     try {
-        const studentForUpdate = yield Student.findOne({
-            where: { id: req.params.id },
-        });
-        if (!studentForUpdate) {
-            return res.status(400).json({ message: "Data not found!" });
-        }
-        yield studentForUpdate.update({
+        const studentForUpdate = yield Student.update({
+            stopId,
             studentFirstName,
             studentLastName,
             studentContactNumber,
-        });
+            studentDescription,
+        }, { where: { id: id } });
+        if (!studentForUpdate) {
+            return res.status(400).json({ message: "Data not found!" });
+        }
         res.status(200).json({ message: "Student data successfully updated." });
     }
     catch (erro) {
@@ -72,15 +104,16 @@ const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: "Server error." });
     }
 });
+// Delete a single student from the adress
 const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, stopId } = req.params;
     try {
-        const studentForDeletion = yield Student.findOne({
-            where: { id: req.params.id },
+        const studentForDeletion = yield Student.destroy({
+            where: { id: id, stopId },
         });
         if (!studentForDeletion) {
             return res.status(400).json({ message: "Data not found!" });
         }
-        yield studentForDeletion.destroy();
         res.status(200).json({ message: "Student successfully deleted." });
     }
     catch (error) {

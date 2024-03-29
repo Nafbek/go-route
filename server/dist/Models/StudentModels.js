@@ -26,6 +26,11 @@ Student.init({
     },
     studentContactNumber: {
         type: DataTypes.STRING,
+        allowNull: true,
+    },
+    studentDescription: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
 }, {
     sequelize,
