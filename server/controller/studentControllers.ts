@@ -37,9 +37,7 @@ const findSingleStudent = async (req: Request, res: Response) => {
       include: [
         {
           model: Package,
-          include: [
-            { model: Tier, include: [{ model: Stop, as: "StudentAtStop" }] },
-          ],
+          include: [{ model: Tier, include: [{ model: Stop, as: "stops" }] }],
         },
       ],
       where: { id: id },

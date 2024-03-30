@@ -73,8 +73,8 @@ const findTierBySchoolOrRouteNumber = (req, res) => __awaiter(void 0, void 0, vo
                 { model: Package },
                 {
                     model: Stop,
-                    as: "StopOnTier",
-                    include: [{ model: Student, as: "StudentAtStop" }],
+                    as: "stops",
+                    include: [{ model: Student, as: "students" }],
                 },
             ],
             // offset: 10,

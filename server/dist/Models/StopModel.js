@@ -25,11 +25,11 @@ Stop.init({
         allowNull: false,
     },
     pickupTime_home: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     dropoffTime_home: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     destinationAddress: {
@@ -37,11 +37,11 @@ Stop.init({
         allowNull: true,
     },
     pickupTime_school: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     dropoffTime_school: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
     },
 }, {

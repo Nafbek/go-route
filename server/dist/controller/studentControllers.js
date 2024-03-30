@@ -37,9 +37,7 @@ const findSingleStudent = (req, res) => __awaiter(void 0, void 0, void 0, functi
             include: [
                 {
                     model: Package,
-                    include: [
-                        { model: Tier, include: [{ model: Stop, as: "StudentAtStop" }] },
-                    ],
+                    include: [{ model: Tier, include: [{ model: Stop, as: "stops" }] }],
                 },
             ],
             where: { id: id },

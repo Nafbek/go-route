@@ -7,11 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MainDriver } from "../Models/MainDriverModel.js";
-import { Package } from "../Models/PackageModel.js";
-import { Tier } from "../Models/TierModel.js";
-import { Stop } from "../Models/StopModel.js";
-import { Student } from "../Models/StudentModels.js";
+// import { MainDriver } from "../Models/MainDriverModel.js";
+// import { Package } from "../Models/PackageModel.js";
+// import { Tier } from "../Models/TierModel.js";
+// import { Stop } from "../Models/StopModel.js";
+// import { Student } from "../Models/StudentModels.js";
+import { MainDriver, Package, Tier, Stop, Student } from "../Models/index.js";
 //Create a driver
 const createMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -82,8 +83,8 @@ const findSingleMainDriver = (req, res) => __awaiter(void 0, void 0, void 0, fun
                             include: [
                                 {
                                     model: Stop,
-                                    as: "StopOnTier",
-                                    include: [{ model: Student, as: "StudentAtStop" }],
+                                    as: "stops",
+                                    include: [{ model: Student, as: "students" }],
                                 },
                             ],
                         },
@@ -115,8 +116,8 @@ const findAllDriversBySchool = (req, res) => __awaiter(void 0, void 0, void 0, f
                             include: [
                                 {
                                     model: Stop,
-                                    as: "StopOnTier",
-                                    include: [{ model: Student, as: "StudentAtStop" }],
+                                    as: "stops",
+                                    include: [{ model: Student, as: "students" }],
                                 },
                             ],
                             where: { tierAnchor_school: tierAnchor_school },
