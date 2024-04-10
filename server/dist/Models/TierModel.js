@@ -23,7 +23,6 @@ Tier.init({
             model: "package",
             key: "id",
         },
-        allowNull: true,
     },
     routeNumber: {
         type: DataTypes.STRING,
@@ -43,18 +42,18 @@ Tier.init({
     },
     totalRiders: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     runningDays: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     totalMiles: {
         type: DataTypes.FLOAT,
         allowNull: true,
     },
     routeDescription: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true,
     },
 }, {

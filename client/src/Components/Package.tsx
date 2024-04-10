@@ -10,8 +10,9 @@ export default function Package() {
   // const { searchResults } = useSearchContext();
 
   const [packageInfo, setPackageInfo] = useState({
-    districtName: "",
+    driverId: "",
     packageNumber: "",
+    districtName: "",
     packageDescription: "",
   });
   const [infoSavingStatus, setInfoSavingStatus] = useState("");
@@ -30,6 +31,7 @@ export default function Package() {
         console.log("Error occured while saving package information.");
       } else {
         setPackageInfo({
+          driverId: "",
           districtName: "",
           packageNumber: "",
           packageDescription: "",
@@ -49,6 +51,17 @@ export default function Package() {
       <div>
         <h2>Package Info</h2>
         <form onSubmit={handleSubmitForm}>
+          <div>
+            <label htmlFor="driverId">Main Driver Name</label>
+            <input
+              type="text"
+              id="driverId"
+              name="driverId"
+              placeholder="Driver Name"
+              onChange={handleInputChange}
+            />
+          </div>
+
           <div>
             <label htmlFor="districtName">Name of District</label>
             <input

@@ -40,11 +40,11 @@ export default function Header() {
                 </Nav.Link>
 
                 <NavDropdown title="Action" id="basic-nav-dropdown">
-                  <NavDropdown.Item as={Link} to="/">
+                  <NavDropdown.Item as={Link} to="/package">
                     Create a route
                   </NavDropdown.Item>
 
-                  <NavDropdown.Item as={Link} to="/package">
+                  <NavDropdown.Item as={Link} to="/package/modify">
                     Modify
                   </NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/">

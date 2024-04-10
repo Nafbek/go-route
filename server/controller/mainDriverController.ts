@@ -1,9 +1,4 @@
 import { Request, Response } from "express";
-// import { MainDriver } from "../Models/MainDriverModel.js";
-// import { Package } from "../Models/PackageModel.js";
-// import { Tier } from "../Models/TierModel.js";
-// import { Stop } from "../Models/StopModel.js";
-// import { Student } from "../Models/StudentModels.js";
 import { MainDriver, Package, Tier, Stop, Student } from "../Models/index.js";
 
 //Create a driver

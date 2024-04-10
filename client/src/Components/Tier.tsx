@@ -5,7 +5,7 @@ export default function Tier() {
   const [tierInfo, setTierInfo] = useState({
     tierAnchor_school: "",
     schoolContactNumber: "",
-    package_id: "",
+    packageId: "",
     routeNumber: "",
     shift: "",
     timeStart: "",
@@ -13,6 +13,7 @@ export default function Tier() {
     totalRiders: "",
     runningDays: "",
     totalMiles: "",
+    routeDescription: "",
   });
   const [submissionStatus, setSubmissionStatus] = useState("");
   const handleInputChange = (e: any) => {
@@ -27,12 +28,11 @@ export default function Tier() {
       console.log("Response data: ", response);
       if (!response) {
         console.error("Error occured while saving route information.");
-        setSubmissionStatus("Route successfully saved.");
       } else {
         setTierInfo({
           tierAnchor_school: "",
           schoolContactNumber: "",
-          package_id: "",
+          packageId: "",
           routeNumber: "",
           shift: "",
           timeStart: "",
@@ -40,10 +40,12 @@ export default function Tier() {
           totalRiders: "",
           runningDays: "",
           totalMiles: "",
+          routeDescription: "",
         });
+        setSubmissionStatus("Route successfully saved.");
       }
     } catch (error) {
-      console.error("Server error occured.", error);
+      console.log("Server error occured.", error);
       setSubmissionStatus("Server error occured while saving the route.");
     }
   };
@@ -118,6 +120,15 @@ export default function Tier() {
             />
             <label htmlFor="totalMiles">Total miles</label>
             <input type="text" id="totalMiles" placeholder="total mileage" />
+          </div>
+          <div>
+            <label htmlFor="tierAnchor_school">Route/Tier Description:</label>
+            <input
+              type="text"
+              id="routeDescription"
+              placeholder="Route/tier description"
+              onChange={handleInputChange}
+            />
           </div>
           <button type="submit">Save</button>
         </form>

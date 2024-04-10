@@ -3,8 +3,8 @@ import { sequelize } from "../config/connection.js";
 
 class Tier extends Model {
   public id!: number;
-  public packageId!: number | null;
-  public tierAnchor_school!: string | null;
+  public packageId!: number;
+  public tierAnchor_school!: string;
   public shift!: string;
   public schoolContactNumber!: string | null;
   public routeNumber!: string;
@@ -38,7 +38,6 @@ Tier.init(
         model: "package",
         key: "id",
       },
-      allowNull: true,
     },
     routeNumber: {
       type: DataTypes.STRING,
@@ -58,11 +57,11 @@ Tier.init(
     },
     totalRiders: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     runningDays: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     totalMiles: {
       type: DataTypes.FLOAT,
@@ -70,7 +69,7 @@ Tier.init(
     },
 
     routeDescription: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: true,
     },
   },
