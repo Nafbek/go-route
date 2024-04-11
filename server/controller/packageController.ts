@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-import { Package } from "../Models/PackageModel.js";
-import { Tier } from "../Models/TierModel.js";
-import { Stop } from "../Models/StopModel.js";
-import { Student } from "../Models/StudentModels.js";
+// import { Package } from "../Models/PackageModel.js";
+// import { Tier } from "../Models/TierModel.js";
+// import { Stop } from "../Models/StopModel.js";
+// import { Student } from "../Models/StudentModels.js";
+// import { MainDriver } from "Models/MainDriverModel.js";
+import { MainDriver, Package, Tier, Stop, Student } from "../Models/index.js";
 
 // Create package with
 const createPackageInfo = async (req: Request, res: Response) => {
@@ -40,7 +42,11 @@ const findSinglePackage = async (req: Request, res: Response) => {
   const { packageNumber } = req.params;
   try {
     const foundPackage = await Package.findOne({
+      where: {
+        packageNumber: packageNumber,
+      },
       include: [
+        { model: MainDriver },
         {
           model: Tier,
           include: [
@@ -50,9 +56,6 @@ const findSinglePackage = async (req: Request, res: Response) => {
               include: [{ model: Student, as: "students" }],
             },
           ],
-          where: {
-            packageNumber: packageNumber,
-          },
         },
       ],
     });

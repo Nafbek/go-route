@@ -1,3 +1,8 @@
+// import { Student } from "../Models/StudentModels.js";
+// import { MainDriver } from "../Models/MainDriverModel.js";
+// import { Package } from "../Models/PackageModel.js";
+// import { Stop } from "../Models/StopModel.js";
+// import { Tier } from "../Models/TierModel.js";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,8 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Stop } from "../Models/StopModel.js";
-import { Tier } from "../Models/TierModel.js";
+import { Tier, Stop, Student, Package } from "../Models/index.js";
 // Create a stop/adress
 const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tierId, stopName, stopAddress, destinationAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
@@ -36,12 +40,18 @@ const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const foundStop = yield Stop.findOne({
+            where: { id: req.params.id },
             include: [
                 {
-                    model: Tier,
+                    model: Package,
+                    include: [
+                        {
+                            model: Tier,
+                        },
+                    ],
                 },
+                { model: Student, as: "Students" },
             ],
-            where: { id: req.params.id },
         });
         if (!foundStop) {
             return res.status(400).json({ message: "Address not not found!" });

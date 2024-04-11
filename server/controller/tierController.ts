@@ -71,11 +71,11 @@ const createTier = async (req: Request, res: Response) => {
 
 // Find route/tier by school or route number
 const findTierBySchoolOrRouteNumber = async (req: Request, res: Response) => {
-  const { routeNumber, tierAnchor_school } = req.params;
+  const { routeNumber } = req.params;
   console.log("Route number is: ", routeNumber);
   try {
     const foundTierBySchoolOrRouteNumber = await Tier.findAndCountAll({
-      where: { routeNumber, tierAnchor_school },
+      where: { routeNumber },
       include: [
         { model: Package },
         {

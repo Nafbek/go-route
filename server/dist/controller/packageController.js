@@ -7,10 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Package } from "../Models/PackageModel.js";
-import { Tier } from "../Models/TierModel.js";
-import { Stop } from "../Models/StopModel.js";
-import { Student } from "../Models/StudentModels.js";
+// import { Package } from "../Models/PackageModel.js";
+// import { Tier } from "../Models/TierModel.js";
+// import { Stop } from "../Models/StopModel.js";
+// import { Student } from "../Models/StudentModels.js";
+// import { MainDriver } from "Models/MainDriverModel.js";
+import { MainDriver, Package, Tier, Stop, Student } from "../Models/index.js";
 // Create package with
 const createPackageInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { packageNumber, districtName, packageDescription, driverId } = req.body;
@@ -45,7 +47,11 @@ const findSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const { packageNumber } = req.params;
     try {
         const foundPackage = yield Package.findOne({
+            where: {
+                packageNumber: packageNumber,
+            },
             include: [
+                { model: MainDriver },
                 {
                     model: Tier,
                     include: [
@@ -55,9 +61,6 @@ const findSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, functi
                             include: [{ model: Student, as: "students" }],
                         },
                     ],
-                    where: {
-                        packageNumber: packageNumber,
-                    },
                 },
             ],
         });

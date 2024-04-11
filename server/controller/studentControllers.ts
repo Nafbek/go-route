@@ -34,13 +34,14 @@ const findSingleStudent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const foundSingleStudent = await Student.findOne({
-      include: [
-        {
-          model: Package,
-          include: [{ model: Tier, include: [{ model: Stop, as: "stops" }] }],
-        },
-      ],
       where: { id: id },
+      // include: [
+      //   {
+      //     model: Stop,
+      //     as: "stops",
+      //     include: [{ model: Tier, include: [{ model: Package }] }],
+      //   },
+      // ],
     });
     if (!foundSingleStudent) {
       return res.status(400).json({ message: "Data not found!" });

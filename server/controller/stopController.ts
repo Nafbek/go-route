@@ -1,8 +1,10 @@
-import { Student } from "../Models/StudentModels.js";
-import { MainDriver } from "../Models/MainDriverModel.js";
-import { Package } from "../Models/PackageModel.js";
-import { Stop } from "../Models/StopModel.js";
-import { Tier } from "../Models/TierModel.js";
+// import { Student } from "../Models/StudentModels.js";
+// import { MainDriver } from "../Models/MainDriverModel.js";
+// import { Package } from "../Models/PackageModel.js";
+// import { Stop } from "../Models/StopModel.js";
+// import { Tier } from "../Models/TierModel.js";
+
+import { Tier, Stop, Student, Package, MainDriver } from "../Models/index.js";
 import { Request, Response } from "express";
 
 // Create a stop/adress
@@ -41,12 +43,19 @@ const createStop = async (req: Request, res: Response) => {
 const findStop = async (req: Request, res: Response) => {
   try {
     const foundStop = await Stop.findOne({
-      include: [
-        {
-          model: Tier,
-        },
-      ],
       where: { id: req.params.id },
+      include: [
+        // {
+        //   model: Tier,
+        //   include: [
+        //     {
+        //       model: Package,
+        //       include: [{ model: MainDriver }],
+        //     },
+        //   ],
+        // },
+        { model: Student, as: "students" },
+      ],
     });
 
     if (!foundStop) {
