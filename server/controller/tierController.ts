@@ -116,6 +116,7 @@ const updateTier = async (req: Request, res: Response) => {
     totalRiders,
     runningDays,
     totalMiles,
+    routeDescription,
   } = req.body;
   try {
     const tierForupdate = await Tier.update(
@@ -130,6 +131,7 @@ const updateTier = async (req: Request, res: Response) => {
         totalRiders,
         runningDays,
         totalMiles,
+        routeDescription,
       },
       { where: { id: req.params.id } }
     );

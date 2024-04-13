@@ -1,12 +1,7 @@
 import { Request, Response } from "express";
-// import { Package } from "../Models/PackageModel.js";
-// import { Tier } from "../Models/TierModel.js";
-// import { Stop } from "../Models/StopModel.js";
-// import { Student } from "../Models/StudentModels.js";
-// import { MainDriver } from "Models/MainDriverModel.js";
 import { MainDriver, Package, Tier, Stop, Student } from "../Models/index.js";
 
-// Create package with
+// Create a package
 const createPackageInfo = async (req: Request, res: Response) => {
   const { packageNumber, districtName, packageDescription, driverId } =
     req.body;
@@ -24,7 +19,7 @@ const createPackageInfo = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error." });
   }
 };
-
+// Find all packages
 const findAllPackage = async (req: Request, res: Response) => {
   try {
     const foundAllPackage = await Package.findAll();
@@ -37,7 +32,7 @@ const findAllPackage = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
+// Find a single package with all nested data
 const findSinglePackage = async (req: Request, res: Response) => {
   const { packageNumber } = req.params;
   try {
@@ -69,7 +64,7 @@ const findSinglePackage = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error." });
   }
 };
-
+// Update a package
 const updatePackage = async (req: Request, res: Response) => {
   const { driverId, districtName, packageNumber, packageDescription } =
     req.body;
@@ -94,6 +89,7 @@ const updatePackage = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error." });
   }
 };
+// Remove a package
 const deleteSinglePackage = async (req: Request, res: Response) => {
   try {
     const packageForDeletion = await Package.destroy({

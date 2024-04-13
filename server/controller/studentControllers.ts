@@ -35,13 +35,6 @@ const findSingleStudent = async (req: Request, res: Response) => {
     const { id } = req.params;
     const foundSingleStudent = await Student.findOne({
       where: { id: id },
-      // include: [
-      //   {
-      //     model: Stop,
-      //     as: "stops",
-      //     include: [{ model: Tier, include: [{ model: Package }] }],
-      //   },
-      // ],
     });
     if (!foundSingleStudent) {
       return res.status(400).json({ message: "Data not found!" });
@@ -52,36 +45,6 @@ const findSingleStudent = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error." });
   }
 };
-
-// const updateStudent = async (req: Request, res: Response) => {
-//   const {
-//     stopId,
-//     studentFirstName,
-//     studentLastName,
-//     studentContactNumber,
-//     studentDescription,
-//   } = req.body;
-//   try {
-//     const studentForUpdate = await Student.findOne({
-//       where: { id: req.params.id },
-//     });
-//     if (!studentForUpdate) {
-//       return res.status(400).json({ message: "Data not found!" });
-//     }
-
-//     await studentForUpdate.update({
-//       stopId,
-//       studentFirstName,
-//       studentLastName,
-//       studentContactNumber,
-//       studentDescription,
-//     });
-//     res.status(200).json({ message: "Student data successfully updated." });
-//   } catch (erro) {
-//     console.error("Error occured while updating data.");
-//     res.status(500).json({ message: "Server error." });
-//   }
-// };
 
 // Update student data
 const updateStudent = async (req: Request, res: Response) => {
@@ -117,10 +80,10 @@ const updateStudent = async (req: Request, res: Response) => {
 };
 // Delete a single student from the adress
 const deleteStudent = async (req: Request, res: Response) => {
-  const { id, stopId } = req.params;
+  const { id } = req.params;
   try {
     const studentForDeletion = await Student.destroy({
-      where: { id: id, stopId },
+      where: { id: id },
     });
 
     if (!studentForDeletion) {

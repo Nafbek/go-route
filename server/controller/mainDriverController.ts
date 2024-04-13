@@ -135,7 +135,7 @@ const findAllDriversBySchool = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error." });
   }
 };
-
+// Update a single driver
 const updateDriver = async (req: Request, res: Response) => {
   const {
     driverFirstName,
@@ -169,7 +169,7 @@ const updateDriver = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error." });
   }
 };
-
+// Remove a driver from the list
 const deleteSingleDriver = async (req: Request, res: Response) => {
   try {
     const driverForDeletion = await MainDriver.destroy({

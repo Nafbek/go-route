@@ -79,7 +79,7 @@ const updateStop = async (req: Request, res: Response) => {
     dropoffTime_school,
   } = req.body;
 
-  const { tierId, id } = req.params;
+  const { id } = req.params;
   try {
     const stopForUpdate = await Stop.update(
       {
@@ -91,7 +91,7 @@ const updateStop = async (req: Request, res: Response) => {
         pickupTime_school,
         dropoffTime_school,
       },
-      { where: { id: id, tierId: tierId } }
+      { where: { id: id } }
     );
     if (!stopForUpdate) {
       return res.status(400).json({ message: "Unable to update the stop!" });
@@ -107,9 +107,9 @@ const updateStop = async (req: Request, res: Response) => {
 // Delete a single stop
 const deleteStop = async (req: Request, res: Response) => {
   try {
-    const { id, tierId } = req.params;
+    const { id } = req.params;
     const stopFordeletion = await Stop.destroy({
-      where: { id: id, tierId: tierId },
+      where: { id: id },
     });
     if (!stopFordeletion) {
       return res.status(400).json({ message: "Unable to remove the stop!" });
