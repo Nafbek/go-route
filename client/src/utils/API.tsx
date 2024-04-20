@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 
+// Define the interface for MainDriverApi
 interface MainDriverApi {
   createMainDriver: (data: any) => Promise<string>;
   getAllMainDriver: () => Promise<string[] | null>;
@@ -12,8 +13,9 @@ interface MainDriverApi {
   updateDriver: (data: any) => Promise<string | null>;
   deleteDriver: (driverName: string) => Promise<string>;
 }
-
+// Implementation of MainDriverApi
 const MainDriverApi: MainDriverApi = {
+  // Create a main driver
   createMainDriver: async (data: any): Promise<string> => {
     console.log(data);
     try {
@@ -28,7 +30,7 @@ const MainDriverApi: MainDriverApi = {
       throw error;
     }
   },
-
+  // Find all drivers
   getAllMainDriver: async () => {
     try {
       const response: AxiosResponse<string[]> = await axios.get(
@@ -49,7 +51,7 @@ const MainDriverApi: MainDriverApi = {
       throw error;
     }
   },
-
+  // Find a single driver
   getSingleDriver: async () => {
     try {
       const response: AxiosResponse<string> = await axios.get(

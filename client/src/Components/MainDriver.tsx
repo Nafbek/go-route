@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MainDriverApi } from "../utils/API";
+import { useParams } from "react-router-dom";
 
 interface ApiResponse {
   passcode: any;
@@ -57,6 +58,28 @@ export default function MainDriver() {
       );
     }
   };
+  // Find all drivers with basic profile
+  const findAllDrivers = async () => {
+    try {
+      const response = await MainDriverApi.getAllMainDriver();
+      console.log("All Drivers:", response);
+    } catch (error) {
+      console.error("Error occured while fetching all drivers:", error);
+    }
+  };
+
+  const findOnlySingleDriverProfile = async () => {
+    const { driverFirstName } = useParams();
+    try {
+      const response =
+        await MainDriverApi.getOnlySingleDriverProfile(driverFirstName)
+    } catch (error) {
+      console.error(
+        "Error occured while fetching a single driver by name:",
+        error
+      );
+    }
+  };
 
   return (
     <>
@@ -109,17 +132,7 @@ export default function MainDriver() {
               onChange={handleInputChange}
             />
           </div>
-          {/* <div>
-            <label htmlFor="password">Password:</label>
-            <input
-              type="text"
-              id="password"
-              name="password"
-              placeholder="password"
-              className=""
-              onChange={handleInputChange}
-            />
-          </div> */}
+
           <button type="submit">Submit form</button>
         </form>
 

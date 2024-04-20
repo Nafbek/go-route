@@ -6,10 +6,11 @@ export default function Student() {
     studentFirstName: "",
     studentLastName: "",
     studentContactNumber: "",
+    studentDescription: "",
   });
   const [submissionStatus, setSubmissionStatus] = useState("");
   const handleInputChange = (e: any) => {
-    const [name, value] = e.target;
+    const { name, value } = e.target;
     setStudentInfo({ ...studentInfo, [name]: value });
   };
   const handleSubmitForm = async (e: any) => {
@@ -26,6 +27,7 @@ export default function Student() {
           studentFirstName: "",
           studentLastName: "",
           studentContactNumber: "",
+          studentDescription: "",
         });
         setSubmissionStatus("Students' data successfully created.");
       }
@@ -46,6 +48,7 @@ export default function Student() {
             <input
               type="text"
               id="studentFirstName"
+              name="studentFirstName"
               placeholder="student first name"
               onChange={handleInputChange}
             />
@@ -53,6 +56,7 @@ export default function Student() {
             <input
               type="text"
               id="studentLastName"
+              name="studentLastName"
               placeholder="student last name"
               onChange={handleInputChange}
             />
@@ -60,6 +64,15 @@ export default function Student() {
             <input
               type="text"
               id="studentContactNumber"
+              name="studentContactNumber"
+              placeholder="student contact number"
+              onChange={handleInputChange}
+            />
+            <label>Student Description</label>
+            <input
+              type="text"
+              id="studentDescription"
+              name="studentDescription"
               placeholder="student contact number"
               onChange={handleInputChange}
             />

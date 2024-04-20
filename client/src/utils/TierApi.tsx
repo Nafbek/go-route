@@ -11,7 +11,7 @@ interface TierApi {
 }
 
 const TierApi: TierApi = {
-  createTier: async (data: any) => {
+  createTier: async (data) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/tier`, data, {
         headers: {
