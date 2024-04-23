@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StopApi } from "../utils/StopApi";
+import { StopApi } from "../../utils/StopApi";
 
 export default function Stop() {
   const [stopInfo, setStopInfo] = useState({

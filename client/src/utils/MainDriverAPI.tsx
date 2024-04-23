@@ -7,9 +7,11 @@ const API_BASE_URL =
 interface MainDriverApi {
   createMainDriver: (data: any) => Promise<string>;
   getAllMainDriver: () => Promise<string[] | null>;
-  getAllDriverBySchool: () => Promise<string[] | null>;
-  getSingleDriver: () => Promise<string | null>;
-  getOnlySingleDriverProfile: () => Promise<string | null>;
+  getAllDriverBySchool: (tierAnchor_school: string) => Promise<string[] | null>;
+  getSingleDriver: (driverFirstName: string) => Promise<string | null>;
+  getOnlySingleDriverProfile: (
+    driverFirstName: string
+  ) => Promise<string | null>;
   updateDriver: (data: any) => Promise<string | null>;
   deleteDriver: (driverName: string) => Promise<string>;
 }
@@ -52,10 +54,10 @@ const MainDriverApi: MainDriverApi = {
     }
   },
   // Find a single driver
-  getSingleDriver: async () => {
+  getSingleDriver: async (driverFirstName: string) => {
     try {
       const response: AxiosResponse<string> = await axios.get(
-        `${API_BASE_URL}/api/driver/driverFirstName`,
+        `${API_BASE_URL}/api/driver/details${driverFirstName}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -73,10 +75,10 @@ const MainDriverApi: MainDriverApi = {
     }
   },
 
-  getOnlySingleDriverProfile: async () => {
+  getOnlySingleDriverProfile: async (driverFirstName: string) => {
     try {
       const response: AxiosResponse<string> = await axios.get(
-        `${API_BASE_URL}/api/driver/profile`,
+        `${API_BASE_URL}/api/driver/profile/${driverFirstName}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -93,10 +95,10 @@ const MainDriverApi: MainDriverApi = {
       throw error;
     }
   },
-  getAllDriverBySchool: async () => {
+  getAllDriverBySchool: async (tierAnchor_school: string) => {
     try {
       const response: AxiosResponse<string[]> = await axios.get(
-        `${API_BASE_URL}/api/driver/tierAnchor_school`,
+        `${API_BASE_URL}/api/driver/${tierAnchor_school}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -136,10 +138,10 @@ const MainDriverApi: MainDriverApi = {
     }
   },
 
-  deleteDriver: async () => {
+  deleteDriver: async (driverFirstName: string) => {
     try {
       const response = await axios.delete(
-        `${API_BASE_URL}/api/driver/driverFirstName`,
+        `${API_BASE_URL}/api/driver/${driverFirstName}`,
         {
           headers: {
             "Content-Type": "application/json",

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import MainDriver from "./MainDriver";
-import Package from "./Package";
-import Stop from "./Stop";
-import Student from "./Student";
-import Tier from "./Tier";
+import MainDriver from "../Components/MainDriver/MainDriverForm";
+import Package from "../Components/Package/PackageForm";
+import Stop from "../Components/Stop/StopForm";
+import Student from "../Components/Student/StudentForm";
+import Tier from "../Components/Tier/TierForm";
 import { createContext, useContext, useState } from "react";
 
 import { PackageApi } from "../utils/PackageAPI";

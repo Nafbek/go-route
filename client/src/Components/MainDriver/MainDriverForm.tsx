@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MainDriverApi } from "../utils/API";
+import { MainDriverApi } from "../../utils/MainDriverAPI";
 import { useParams } from "react-router-dom";
 
 interface ApiResponse {
@@ -55,28 +55,6 @@ export default function MainDriver() {
       console.log("Server Error occured while submitting driver's data.");
       setFormSubmissionStatus(
         "Server Error occured while submitting driver's data. Please try again."
-      );
-    }
-  };
-  // Find all drivers with basic profile
-  const findAllDrivers = async () => {
-    try {
-      const response = await MainDriverApi.getAllMainDriver();
-      console.log("All Drivers:", response);
-    } catch (error) {
-      console.error("Error occured while fetching all drivers:", error);
-    }
-  };
-
-  const findOnlySingleDriverProfile = async () => {
-    const { driverFirstName } = useParams();
-    try {
-      const response =
-        await MainDriverApi.getOnlySingleDriverProfile(driverFirstName)
-    } catch (error) {
-      console.error(
-        "Error occured while fetching a single driver by name:",
-        error
       );
     }
   };

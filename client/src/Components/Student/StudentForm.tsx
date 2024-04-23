@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StudentApi } from "../utils/StudentApi";
+import { StudentApi } from "../../utils/StudentApi";
 
 export default function Student() {
   const [studentInfo, setStudentInfo] = useState({

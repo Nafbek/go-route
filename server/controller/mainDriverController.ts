@@ -189,8 +189,8 @@ const deleteSingleDriver = async (req: Request, res: Response) => {
 export {
   createMainDriver,
   findAllDrivers,
-  findOnlySingleDriverProfile,
   findSingleMainDriver,
+  findOnlySingleDriverProfile,
   findAllDriversBySchool,
   updateDriver,
   deleteSingleDriver,

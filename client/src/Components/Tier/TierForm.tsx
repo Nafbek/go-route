@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TierApi } from "../utils/TierApi";
+import { TierApi } from "../../utils/TierApi";
 
 export default function Tier() {
   const [tierInfo, setTierInfo] = useState({

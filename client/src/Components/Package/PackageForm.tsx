@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { PackageApi } from "../utils/PackageAPI";
-import Tier from "./Tier";
-import Stop from "./Stop";
-import Student from "./Student";
-import MainDriver from "./MainDriver";
-import { useSearchContext } from "./DispatcherGate";
+import { PackageApi } from "../../utils/PackageAPI";
+import Tier from "../Tier/TierForm";
+import Stop from "../Stop/StopForm";
+import Student from "../Student/StudentForm";
+import MainDriver from "../MainDriver/MainDriverForm";
+import { useSearchContext } from "../../Pages/DispatcherGate";
 
 export default function Package() {
   // const { searchResults } = useSearchContext();
