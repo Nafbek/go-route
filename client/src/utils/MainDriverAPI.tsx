@@ -5,20 +5,20 @@ const API_BASE_URL =
 
 // Define the interface for MainDriverApi
 interface MainDriverApi {
-  createMainDriver: (data: any) => Promise<string>;
-  getAllMainDriver: () => Promise<string[] | null>;
-  getAllDriverBySchool: (tierAnchor_school: string) => Promise<string[] | null>;
+  createMainDriver: (data: any) => Promise<any[]>;
+  getAllMainDriver: () => Promise<any[] | null>;
+  getAllDriverBySchool: (tierAnchor_school: string) => Promise<any[] | null>;
   getSingleDriver: (driverFirstName: string) => Promise<string | null>;
   getOnlySingleDriverProfile: (
     driverFirstName: string
   ) => Promise<string | null>;
-  updateDriver: (data: any) => Promise<string | null>;
+  updateDriver: (data: any) => Promise<string[] | null>;
   deleteDriver: (driverName: string) => Promise<string>;
 }
 // Implementation of MainDriverApi
 const MainDriverApi: MainDriverApi = {
   // Create a main driver
-  createMainDriver: async (data: any): Promise<string> => {
+  createMainDriver: async (data: any): Promise<any[]> => {
     console.log(data);
     try {
       console.log("Req. url", `${API_BASE_URL}/api/driver`);
@@ -26,7 +26,7 @@ const MainDriverApi: MainDriverApi = {
         headers: { "Content-Type": "application/json" },
       });
 
-      return response.data.passcode as string;
+      return response.data.passcode;
     } catch (error) {
       console.error("Server error occured", error);
       throw error;
@@ -35,7 +35,7 @@ const MainDriverApi: MainDriverApi = {
   // Find all drivers
   getAllMainDriver: async () => {
     try {
-      const response: AxiosResponse<string[]> = await axios.get(
+      const response: AxiosResponse<any[]> = await axios.get(
         `${API_BASE_URL}/api/driver/`,
         {
           headers: {
@@ -97,7 +97,7 @@ const MainDriverApi: MainDriverApi = {
   },
   getAllDriverBySchool: async (tierAnchor_school: string) => {
     try {
-      const response: AxiosResponse<string[]> = await axios.get(
+      const response: AxiosResponse<any[]> = await axios.get(
         `${API_BASE_URL}/api/driver/${tierAnchor_school}`,
         {
           headers: {
@@ -118,7 +118,7 @@ const MainDriverApi: MainDriverApi = {
 
   updateDriver: async (data: any) => {
     try {
-      const response: AxiosResponse<string> = await axios.put(
+      const response: AxiosResponse<string[]> = await axios.put(
         `${API_BASE_URL}/api/driver/driverFirstName`,
         data,
         {

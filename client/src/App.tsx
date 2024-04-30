@@ -12,13 +12,14 @@ import { DispatcherGate } from "./Pages/DispatcherGate";
 import { Footer } from "./Components/Footer";
 import { Dashboard } from "./Pages/Dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
+import MainDriverFetchData from "./Components/MainDriver/MainDriverDataFetcher";
 function App() {
   return (
     <Router>
       <Header />
       <div className="App">
         <div>Test goRoute!</div>
-        {/* <MainDriver /> */}
+        <MainDriverFetchData />
 
         <Routes>
           <Route path="/" element={<Home />} />
