@@ -6,14 +6,12 @@ const API_BASE_URL =
 // Define the interface for MainDriverApi
 interface MainDriverApi {
   createMainDriver: (data: any) => Promise<any[]>;
-  getAllMainDriver: () => Promise<any[] | null>;
-  getAllDriverBySchool: (tierAnchor_school: string) => Promise<any[] | null>;
-  getSingleDriver: (driverFirstName: string) => Promise<string | null>;
-  getOnlySingleDriverProfile: (
-    driverFirstName: string
-  ) => Promise<string | null>;
+  findAllDrivers: () => Promise<any[] | null>;
+  findAllDriversBySchool: (tierAnchor_school: string) => Promise<any[] | null>;
+  findSingleMainDriver: (driverFirstName: string) => Promise<string | null>;
+  findOnlySingleDriverProfile: (driverFirstName: string) => Promise<string | null>;
   updateDriver: (data: any) => Promise<string[] | null>;
-  deleteDriver: (driverName: string) => Promise<string>;
+  deleteSingleDriver: (driverName: string) => Promise<string>;
 }
 // Implementation of MainDriverApi
 const MainDriverApi: MainDriverApi = {
@@ -33,7 +31,7 @@ const MainDriverApi: MainDriverApi = {
     }
   },
   // Find all drivers
-  getAllMainDriver: async () => {
+  findAllDrivers: async () => {
     try {
       const response: AxiosResponse<any[]> = await axios.get(
         `${API_BASE_URL}/api/driver/`,
@@ -54,7 +52,7 @@ const MainDriverApi: MainDriverApi = {
     }
   },
   // Find a single driver
-  getSingleDriver: async (driverFirstName: string) => {
+  findSingleMainDriver: async (driverFirstName: string) => {
     try {
       const response: AxiosResponse<string> = await axios.get(
         `${API_BASE_URL}/api/driver/details${driverFirstName}`,
@@ -75,7 +73,7 @@ const MainDriverApi: MainDriverApi = {
     }
   },
 
-  getOnlySingleDriverProfile: async (driverFirstName: string) => {
+  findOnlySingleDriverProfile: async (driverFirstName: string) => {
     try {
       const response: AxiosResponse<string> = await axios.get(
         `${API_BASE_URL}/api/driver/profile/${driverFirstName}`,
@@ -95,7 +93,7 @@ const MainDriverApi: MainDriverApi = {
       throw error;
     }
   },
-  getAllDriverBySchool: async (tierAnchor_school: string) => {
+  findAllDriversBySchool: async (tierAnchor_school: string) => {
     try {
       const response: AxiosResponse<any[]> = await axios.get(
         `${API_BASE_URL}/api/driver/${tierAnchor_school}`,
@@ -138,7 +136,7 @@ const MainDriverApi: MainDriverApi = {
     }
   },
 
-  deleteDriver: async (driverFirstName: string) => {
+  deleteSingleDriver: async (driverFirstName: string) => {
     try {
       const response = await axios.delete(
         `${API_BASE_URL}/api/driver/${driverFirstName}`,

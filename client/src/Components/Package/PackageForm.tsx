@@ -3,12 +3,11 @@ import { PackageApi } from "../../utils/PackageAPI";
 import Tier from "../Tier/TierForm";
 import Stop from "../Stop/StopForm";
 import Student from "../Student/StudentForm";
-import { useSearchContext } from "../../Pages/DispatcherGate";
+// import { useSearchContext } from "../../Pages/DispatcherGate";
 import MainDriverForm from "../MainDriver/MainDriverForm";
 
 export default function Package() {
   // const { searchResults } = useSearchContext();
-
   const [packageInfo, setPackageInfo] = useState({
     driverId: "",
     packageNumber: "",
@@ -45,9 +44,6 @@ export default function Package() {
   };
   return (
     <>
-      <div>
-        <MainDriverForm />
-      </div>
       <div>
         <h2>Package Info</h2>
         <form onSubmit={handleSubmitForm}>
@@ -94,9 +90,9 @@ export default function Package() {
         {infoSavingStatus && <p>{infoSavingStatus}</p>}
       </div>
 
-      <Tier />
+      {/* <Tier />
       <Stop />
-      <Student />
+      <Student /> */}
     </>
   );
 }

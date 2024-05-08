@@ -4,16 +4,17 @@ const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 
 interface PackageApi {
-  createPackageInfo: (data: any) => Promise<string>;
+  createPackageInfo: (data: any) => Promise<any[]>;
 
-  findSinglePackage: () => Promise<string | null>;
-  findAllPackage: () => Promise<string[] | null>;
-  updatePackage: (data: string) => Promise<string | null>;
-  deleteSinglePackage: (data: string) => Promise<string | null>;
+  findSinglePackage: (packageNumber: string) => Promise<string | null>;
+  findAllPackage: () => Promise<any[] | null>;
+  updatePackage: (data: any) => Promise<string | null>;
+  deleteSinglePackage: (packageNumber: string) => Promise<string | null>;
 }
 
 const PackageApi: PackageApi = {
-  createPackageInfo: async (data) => {
+  createPackageInfo: async (data: any) => {
+    console.log("This is saved package info", data);
     try {
       const response = await axios.post(`${API_BASE_URL}/api/package`, data, {
         headers: {
@@ -28,17 +29,17 @@ const PackageApi: PackageApi = {
     }
   },
 
-  findSinglePackage: async () => {
+  findSinglePackage: async (packageNumber: string) => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/package/packageNumber`,
+        `${API_BASE_URL}/api/package/${packageNumber}`,
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-
+      console.log("This is saved package info", response);
       if (!response || response.status !== 200) {
         console.error("Data requested not found. Please try again.");
         return null;
@@ -68,7 +69,7 @@ const PackageApi: PackageApi = {
     }
   },
 
-  updatePackage: async (data: string) => {
+  updatePackage: async (data: any) => {
     try {
       const response: AxiosResponse<string> = await axios.put(
         `${API_BASE_URL}/api/package/packageNumber`,
@@ -91,10 +92,10 @@ const PackageApi: PackageApi = {
     }
   },
 
-  deleteSinglePackage: async () => {
+  deleteSinglePackage: async (packageNumber: string) => {
     try {
       const response = await axios.delete(
-        `${API_BASE_URL}/api/package/packageNumber`,
+        `${API_BASE_URL}/api/package/${packageNumber}`,
         {
           headers: {
             "Content-Type": "application/json",

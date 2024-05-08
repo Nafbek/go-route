@@ -6,6 +6,7 @@ import { DriverUI, SingleDriverDetails } from "./MainDriverUI";
 export default function MainDriverFetchData() {
   const [searchResults, setSearchResults] = useState<any[] | null>();
   const [searchQuery, setSearchQuery] = useState("");
+  const [checkForData, setCheckForData] = useState(false);
 
   const { driverFirstName, tierAnchor_school } = useParams();
 
@@ -13,31 +14,30 @@ export default function MainDriverFetchData() {
     let response: any;
 
     try {
-      if (searchQuery && driverFirstName) {
-        // response = await MainDriverApi.getSingleDriver(driverFirstName);
+      if (searchQuery.trim()) {
+        // response = await MainDriverApi.findSingleDriver(driverFirstName);
 
-        response =
-          await MainDriverApi.getOnlySingleDriverProfile(driverFirstName);
-      } else if (tierAnchor_school) {
-        response = await MainDriverApi.getAllDriverBySchool(tierAnchor_school);
+        response = await MainDriverApi.findOnlySingleDriverProfile(searchQuery);
+        console.log("driver", response);
+        setSearchResults(response ? [response] : []);
+      } else if (searchQuery.trim()) {
+        response = await MainDriverApi.findAllDriversBySchool(searchQuery);
+        setSearchResults(response);
       } else {
-        response = await MainDriverApi.getAllMainDriver();
+        setSearchResults(null);
       }
-
-      setSearchResults(response);
     } catch (error) {
       console.error("Error occured while fetching data", error);
     }
   };
-  // useEffect(() => {
-  //   if (searchQuery) {
-  //     fetchData();
-  //   }
-  // }, [driverFirstName, tierAnchor_school, searchQuery]);
+
+  useEffect(() => {
+    fetchData();
+  }, [driverFirstName, tierAnchor_school]);
 
   // useEffect(() => {
   //   try {
-  //     const response = await MainDriverApi.getOnlySingleDriverProfile(
+  //     const response = await MainDriverApi.findOnlySingleDriverProfile(
   //       driverFirstName!
   //     );
   //     if (!response) {
@@ -51,37 +51,63 @@ export default function MainDriverFetchData() {
     setSearchQuery(e.target.value);
   };
 
-  const handleSearchButton = (e: any) => {
+  const handleSearchButton = async (e: any) => {
     e.preventDefault();
     setSearchResults(null);
-    fetchData();
+    console.log("button clicked");
+    setCheckForData(true);
+
+    await fetchData();
   };
+
+  const fetchAllDriversList = async () => {
+    try {
+      const response = await MainDriverApi.findAllDrivers();
+      setSearchResults(response);
+    } catch (error) {
+      console.error("Error occured occured while fetching list of drivers");
+    }
+  };
+
+  const handleListOfDrivers = async (e: any) => {
+    await fetchAllDriversList();
+  };
+
   return (
     <>
       <div>
-        <form onSubmit={handleSearchButton}>
-          <div>
-            <h1>Driver's related data:</h1>
-          </div>
-          <input
-            type="textx"
-            value={searchQuery}
-            placeholder="search here...."
-            onChange={(e) => {
-              handleSearchInputChange(e);
-            }}
-          />
-          <button type="submit">submit</button>
-        </form>
+        <div>
+          <h1>Driver's related data:</h1>
+        </div>
+        <input
+          type="text"
+          value={searchQuery}
+          placeholder="search here...."
+          onChange={(e) => {
+            handleSearchInputChange(e);
+          }}
+        />
+      </div>
+      <button type="button" onClick={handleSearchButton}>
+        submit
+      </button>
+      <div>
+        <button type="submit" onClick={handleListOfDrivers}>
+          Now search all drivers
+        </button>
       </div>
 
-      <div>Results</div>
-      {searchResults && searchQuery && searchResults.length > 0 ? (
+      {checkForData && (!searchResults || searchResults.length === 0) && (
+        <p>No results found</p>
+      )}
+
+      {searchResults && searchResults.length > 0 ? (
         <DriverUI results={searchResults} />
       ) : (
-        <SingleDriverDetails driverDetails={searchResults} />
+        searchResults !== null && (
+          <SingleDriverDetails driverDetails={searchResults} />
+        )
       )}
-      {searchQuery && searchResults === null && <p>No results found</p>}
     </>
   );
 }

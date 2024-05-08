@@ -7,7 +7,7 @@ export function DriverUI({ results }: { results: any }) {
       {results.map((driver: any) => (
         <div key={driver.id}>
           <p>First Name: {driver.driverFirstName}</p>
-          <p>Last Name: {driver.getFullName}</p>
+          <p>Last Name: {driver.driverSecondName}</p>
           <p>driverContactNumber: {driver.driverContactNumber}</p>
           <p>driverSecondContactNumber: {driver.driverSecondContactNumber}</p>
         </div>
