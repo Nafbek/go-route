@@ -3,11 +3,11 @@ import axios from "axios";
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 interface TierApi {
-  createTier: (data: any) => Promise<string>;
-  findTierBySchool: () => Promise<string | null>;
-  findTierByTime: () => Promise<string | null>;
-  updateTier: (routeNumber: string) => Promise<string>;
-  deleteRouteTier: () => Promise<string>;
+  createTier: (data: any) => Promise<any[]>;
+  findTierBySchool: (tierAnchor_school: string) => Promise<any[] | null>;
+  findTierByTime: (timestart: any) => Promise<any[] | null>;
+  updateTier: (data: any) => Promise<string>;
+  deleteRouteTier: (routenumber: string) => Promise<string>;
 }
 
 const TierApi: TierApi = {
@@ -25,13 +25,16 @@ const TierApi: TierApi = {
     }
   },
 
-  findTierBySchool: async () => {
+  findTierBySchool: async (tierAnchor_school: string) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/tier/school`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        `${API_BASE_URL}/api/tier/${tierAnchor_school}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response || response.status !== 200) {
         console.error("Data requested not found. Please try again.");
         return null;

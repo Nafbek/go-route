@@ -17,9 +17,10 @@ export function SinglePackageDetails({ details }: { details: any }) {
         ))}
       </div>
       {/* <MainDriverFetchData />
-      <Tier />
+    
       <Stop />
       <Student /> */}
+      <Tier />
     </>
   );
 }

@@ -15,6 +15,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import MainDriverFetchData from "./Components/MainDriver/MainDriverDataFetcher";
 import MainDriverForm from "./Components/MainDriver/MainDriverForm";
 import PackageDataFetcher from "./Components/Package/PackageDataFetcher";
+
+import TierDataFetcher from "./Components/Tier/TIerDataFetcher";
 function App() {
   return (
     <Router>
@@ -27,13 +29,13 @@ function App() {
           {/* <Route path="/driver" element={<MainDriver />} /> */}
           <Route path="/package" element={<Package />} />
           <Route path="/package/results" element={<PackageDataFetcher />} />
+          <Route path="/tier" element={<Tier />} />
 
-          {/* <Tier />
-          <Stop />
-          <Student /> */}
           <Route path="/driver/results" element={<MainDriverFetchData />} />
           <Route path="/driver" element={<MainDriverForm />} />
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+
+          <Route path="/tier/results" element={<TierDataFetcher />} />
         </Routes>
       </div>
       <div>
