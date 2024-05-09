@@ -17,6 +17,7 @@ import MainDriverForm from "./Components/MainDriver/MainDriverForm";
 import PackageDataFetcher from "./Components/Package/PackageDataFetcher";
 
 import TierDataFetcher from "./Components/Tier/TIerDataFetcher";
+import { StopDataFetcher } from "./Components/Stop/StopDataFetcher";
 function App() {
   return (
     <Router>
@@ -30,12 +31,14 @@ function App() {
           <Route path="/package" element={<Package />} />
           <Route path="/package/results" element={<PackageDataFetcher />} />
           <Route path="/tier" element={<Tier />} />
+          <Route path="/stop" element={<Stop />} />
 
           <Route path="/driver/results" element={<MainDriverFetchData />} />
           <Route path="/driver" element={<MainDriverForm />} />
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
           <Route path="/tier/results" element={<TierDataFetcher />} />
+          <Route path="/stop/results" element={<StopDataFetcher />} />
         </Routes>
       </div>
       <div>

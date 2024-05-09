@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 interface StopApi {
-  createStop: (data: any) => Promise<string>;
+  createStop: (data: any) => Promise<any[]>;
   findStop: () => Promise<string | null>;
   updateStop: (data: string) => Promise<string | null>;
   deleteStop: () => Promise<string>;
