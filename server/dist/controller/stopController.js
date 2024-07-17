@@ -12,7 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Tier, Stop, Student, Package } from "../Models/index.js";
+import { Tier, Stop, Student, Package, MainDriver } from "../Models/index.js";
 // Create a stop/adress
 const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tierId, stopName, stopAddress, destinationAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
@@ -39,18 +39,21 @@ const createStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 // Find a single stop
 const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const stopAddress = decodeURIComponent(req.params.stopAddress);
+        console.log("this is stopaddress", stopAddress);
         const foundStop = yield Stop.findOne({
-            where: { id: req.params.id },
+            where: { stopAddress: stopAddress },
             include: [
                 {
-                    model: Package,
+                    model: Tier,
                     include: [
                         {
-                            model: Tier,
+                            model: Package,
+                            include: [{ model: MainDriver }],
                         },
                     ],
                 },
-                { model: Student, as: "Students" },
+                { model: Student, as: "students" },
             ],
         });
         if (!foundStop) {
@@ -66,7 +69,7 @@ const findStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 // Update a single stop
 const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { stopName, stopAddress, destinationAddress, pickupTime_home, dropoffTime_home, pickupTime_school, dropoffTime_school, } = req.body;
-    const { tierId, id } = req.params;
+    const { id } = req.params;
     try {
         const stopForUpdate = yield Stop.update({
             stopName,
@@ -76,7 +79,7 @@ const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             dropoffTime_home,
             pickupTime_school,
             dropoffTime_school,
-        }, { where: { id: id, tierId: tierId } });
+        }, { where: { id: id } });
         if (!stopForUpdate) {
             return res.status(400).json({ message: "Unable to update the stop!" });
         }
@@ -90,9 +93,9 @@ const updateStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 // Delete a single stop
 const deleteStop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, tierId } = req.params;
+        const { id } = req.params;
         const stopFordeletion = yield Stop.destroy({
-            where: { id: id, tierId: tierId },
+            where: { id: id },
         });
         if (!stopFordeletion) {
             return res.status(400).json({ message: "Unable to remove the stop!" });

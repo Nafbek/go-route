@@ -8,9 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Student } from "../Models/StudentModels.js";
-import { Package } from "../Models/PackageModel.js";
-import { Tier } from "../Models/TierModel.js";
-import { Stop } from "../Models/StopModel.js";
 // Create a student
 const createStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { stopId, studentFirstName, studentLastName, studentContactNumber, studentDescription, } = req.body;
@@ -34,12 +31,6 @@ const findSingleStudent = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         const { id } = req.params;
         const foundSingleStudent = yield Student.findOne({
-            include: [
-                {
-                    model: Package,
-                    include: [{ model: Tier, include: [{ model: Stop, as: "stops" }] }],
-                },
-            ],
             where: { id: id },
         });
         if (!foundSingleStudent) {
@@ -52,34 +43,6 @@ const findSingleStudent = (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ message: "Server error." });
     }
 });
-// const updateStudent = async (req: Request, res: Response) => {
-//   const {
-//     stopId,
-//     studentFirstName,
-//     studentLastName,
-//     studentContactNumber,
-//     studentDescription,
-//   } = req.body;
-//   try {
-//     const studentForUpdate = await Student.findOne({
-//       where: { id: req.params.id },
-//     });
-//     if (!studentForUpdate) {
-//       return res.status(400).json({ message: "Data not found!" });
-//     }
-//     await studentForUpdate.update({
-//       stopId,
-//       studentFirstName,
-//       studentLastName,
-//       studentContactNumber,
-//       studentDescription,
-//     });
-//     res.status(200).json({ message: "Student data successfully updated." });
-//   } catch (erro) {
-//     console.error("Error occured while updating data.");
-//     res.status(500).json({ message: "Server error." });
-//   }
-// };
 // Update student data
 const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { stopId, studentFirstName, studentLastName, studentContactNumber, studentDescription, } = req.body;
@@ -104,10 +67,10 @@ const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 // Delete a single student from the adress
 const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, stopId } = req.params;
+    const { id } = req.params;
     try {
         const studentForDeletion = yield Student.destroy({
-            where: { id: id, stopId },
+            where: { id: id },
         });
         if (!studentForDeletion) {
             return res.status(400).json({ message: "Data not found!" });

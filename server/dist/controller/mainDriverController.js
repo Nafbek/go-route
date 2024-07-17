@@ -133,6 +133,7 @@ const findAllDriversBySchool = (req, res) => __awaiter(void 0, void 0, void 0, f
         res.status(500).json({ message: "Server error." });
     }
 });
+// Update a single driver
 const updateDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { driverFirstName, driverLastName, driverContactNumber, driverSecondContactNumber, } = req.body;
     try {
@@ -157,6 +158,7 @@ const updateDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(500).json({ message: "Server error." });
     }
 });
+// Remove a driver from the list
 const deleteSingleDriver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const driverForDeletion = yield MainDriver.destroy({
@@ -173,4 +175,4 @@ const deleteSingleDriver = (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(500).json({ message: "Server error." });
     }
 });
-export { createMainDriver, findAllDrivers, findOnlySingleDriverProfile, findSingleMainDriver, findAllDriversBySchool, updateDriver, deleteSingleDriver, };
+export { createMainDriver, findAllDrivers, findSingleMainDriver, findOnlySingleDriverProfile, findAllDriversBySchool, updateDriver, deleteSingleDriver, };

@@ -7,13 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// import { Package } from "../Models/PackageModel.js";
-// import { Tier } from "../Models/TierModel.js";
-// import { Stop } from "../Models/StopModel.js";
-// import { Student } from "../Models/StudentModels.js";
-// import { MainDriver } from "Models/MainDriverModel.js";
 import { MainDriver, Package, Tier, Stop, Student } from "../Models/index.js";
-// Create package with
+// Create a package
 const createPackageInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { packageNumber, districtName, packageDescription, driverId } = req.body;
     try {
@@ -30,6 +25,7 @@ const createPackageInfo = (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ message: "Server error." });
     }
 });
+// Find all packages
 const findAllPackage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const foundAllPackage = yield Package.findAll();
@@ -43,6 +39,7 @@ const findAllPackage = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).json({ message: "Server error" });
     }
 });
+// Find a single package with all nested data
 const findSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { packageNumber } = req.params;
     try {
@@ -74,6 +71,7 @@ const findSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ message: "Server error." });
     }
 });
+// Update a package
 const updatePackage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { driverId, districtName, packageNumber, packageDescription } = req.body;
     try {
@@ -94,6 +92,7 @@ const updatePackage = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: "Server error." });
     }
 });
+// Remove a package
 const deleteSinglePackage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const packageForDeletion = yield Package.destroy({

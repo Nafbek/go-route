@@ -3,7 +3,7 @@ import { Router } from "express";
 const router = Router();
 router.route("/stop").post(createStop);
 router
-    .route("/stop/tierId:id")
+    .route("/stop/:stopAddress")
     .get(findStop)
     .put(updateStop)
     .delete(deleteStop);

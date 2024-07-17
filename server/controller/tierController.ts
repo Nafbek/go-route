@@ -3,6 +3,7 @@ import { Stop } from "../Models/StopModel.js";
 import { Tier } from "../Models/TierModel.js";
 import { Request, Response } from "express";
 import { Package } from "../Models/PackageModel.js";
+import { Op } from "sequelize";
 
 //Create a tier with all associations
 const createTier = async (req: Request, res: Response) => {
@@ -46,54 +47,41 @@ const createTier = async (req: Request, res: Response) => {
   }
 };
 
-// const findTierByTime = async (req: Request, res: Response) => {
-//   try {
-//     const foundTierByTime = await Tier.findAndCountAll({
-//       where: { timeStart: req.params.timeStart },
-//       // include: [
-//       //   { model: Package },
-//       //   {
-//       //     model: Stop,
-//       //     as: "StopOnTier",
-//       //     include: [{ model: Student, as: "StudentAtStop" }],
-//       //   },
-//       // ],
-//     });
-//     if (!foundTierByTime) {
-//       return res.status(400).json({ message: "Data not found!" });
-//     }
-//     res.status(200).json(foundTierByTime);
-//   } catch (error) {
-//     console.error("Error occured while finding tier by time.");
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
-
 // Find route/tier by school or route number
 const findTierBySchoolOrRouteNumber = async (req: Request, res: Response) => {
-  const { routeNumber } = req.params;
-  console.log("Route number is: ", routeNumber);
+  // const { routeNumber, tierAnchor_school, timeStart } = req.params;
+
+  const { query } = req.query;
+  console.log("Query is: ", query);
   try {
-    const foundTierBySchoolOrRouteNumber = await Tier.findAndCountAll({
-      where: { routeNumber },
-      include: [
-        { model: Package },
-        {
-          model: Stop,
-          as: "stops",
-          include: [{ model: Student, as: "students" }],
+    if (query) {
+      const foundTierBySchoolOrRouteNumber = await Tier.findAndCountAll({
+        where: {
+          [Op.or]: [
+            { routeNumber: query },
+            { tierAnchor_school: query },
+            { timeStart: query },
+          ],
         },
-      ],
-      // offset: 10,
-      // limit: 6,
-    });
-    if (
-      !foundTierBySchoolOrRouteNumber ||
-      foundTierBySchoolOrRouteNumber.rows.length === 0
-    ) {
-      return res.status(400).json({ message: "Data not found!" });
+        include: [
+          { model: Package },
+          {
+            model: Stop,
+            as: "stops",
+            include: [{ model: Student, as: "students" }],
+          },
+        ],
+        // offset: 10,
+        // limit: 6,
+      });
+      if (
+        !foundTierBySchoolOrRouteNumber ||
+        foundTierBySchoolOrRouteNumber.rows.length === 0
+      ) {
+        return res.status(400).json({ message: "Data not found!" });
+      }
+      res.status(200).json([foundTierBySchoolOrRouteNumber.rows]);
     }
-    res.status(200).json([foundTierBySchoolOrRouteNumber.rows]);
   } catch (error) {
     console.error(
       "Error coccured while finding route/tier by school or route number.",
@@ -108,7 +96,7 @@ const updateTier = async (req: Request, res: Response) => {
   const {
     tierAnchor_school,
     schoolContactNumber,
-    package_id,
+    packageId,
     routeNumber,
     shift,
     timeStart,
@@ -123,7 +111,7 @@ const updateTier = async (req: Request, res: Response) => {
       {
         tierAnchor_school,
         schoolContactNumber,
-        package_id,
+        packageId,
         routeNumber,
         shift,
         timeStart,

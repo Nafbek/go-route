@@ -4,14 +4,16 @@ const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 interface TierApi {
   createTier: (data: any) => Promise<any[]>;
-  findTierBySchool: (tierAnchor_school: string) => Promise<any[] | null>;
-  findTierByTime: (timestart: any) => Promise<any[] | null>;
+  findTierBySchoolOrRouteNumber: (query: string) => Promise<any[] | null>;
+  // findTierByTime: (timestart: any) => Promise<any[] | null>;
+
   updateTier: (data: any) => Promise<string>;
   deleteRouteTier: (routenumber: string) => Promise<string>;
 }
 
 const TierApi: TierApi = {
-  createTier: async (data) => {
+  createTier: async (data: any) => {
+    console.log("This is tier data: ", data);
     try {
       const response = await axios.post(`${API_BASE_URL}/api/tier`, data, {
         headers: {
@@ -25,16 +27,13 @@ const TierApi: TierApi = {
     }
   },
 
-  findTierBySchool: async (tierAnchor_school: string) => {
+  findTierBySchoolOrRouteNumber: async (query: string) => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/tier/${tierAnchor_school}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/tier/${query}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (!response || response.status !== 200) {
         console.error("Data requested not found. Please try again.");
         return null;
@@ -45,24 +44,24 @@ const TierApi: TierApi = {
       throw error;
     }
   },
-  findTierByTime: async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/api/tier/timestart`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  // findTierByTime: async () => {
+  //   try {
+  //     const response = await axios.get(`${API_BASE_URL}/api/tier/timestart`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
 
-      if (!response || response.status !== 200) {
-        console.error("Data requested not found. Please try again.");
-        return null;
-      }
-      return response.data;
-    } catch (error) {
-      console.error("Server error occured.", error);
-      throw error;
-    }
-  },
+  //     if (!response || response.status !== 200) {
+  //       console.error("Data requested not found. Please try again.");
+  //       return null;
+  //     }
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Server error occured.", error);
+  //     throw error;
+  //   }
+  // },
 
   updateTier: async (data: string) => {
     try {
@@ -85,10 +84,10 @@ const TierApi: TierApi = {
       throw error;
     }
   },
-  deleteRouteTier: async () => {
+  deleteRouteTier: async (routenumber: string) => {
     try {
       const response = await axios.delete(
-        `${API_BASE_URL}/api/tier/routenumber`,
+        `${API_BASE_URL}/api/tier/${routenumber}`,
         {
           headers: {
             "Content-Type": "application/json",

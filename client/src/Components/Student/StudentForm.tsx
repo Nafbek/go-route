@@ -73,7 +73,7 @@ export default function Student() {
               type="text"
               id="studentDescription"
               name="studentDescription"
-              placeholder="student contact number"
+              placeholder="student description"
               onChange={handleInputChange}
             />
           </div>

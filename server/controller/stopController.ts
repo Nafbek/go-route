@@ -42,18 +42,21 @@ const createStop = async (req: Request, res: Response) => {
 // Find a single stop
 const findStop = async (req: Request, res: Response) => {
   try {
+    const stopAddress = decodeURIComponent(req.params.stopAddress);
+    console.log("this is stopaddress", stopAddress);
     const foundStop = await Stop.findOne({
-      where: { id: req.params.id },
+      where: { stopAddress: stopAddress },
       include: [
-        // {
-        //   model: Tier,
-        //   include: [
-        //     {
-        //       model: Package,
-        //       include: [{ model: MainDriver }],
-        //     },
-        //   ],
-        // },
+        {
+          model: Tier,
+
+          include: [
+            {
+              model: Package,
+              include: [{ model: MainDriver }],
+            },
+          ],
+        },
         { model: Student, as: "students" },
       ],
     });

@@ -4,7 +4,7 @@ const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 interface StudentApi {
   createStudent: (data: any) => Promise<string[]>;
-  findSingleStudent: () => Promise<string | null>;
+  findSingleStudent: (studentFirstName: string) => Promise<string[] | null>;
   updateStudent: (data: string) => Promise<string | null>;
   deleteStudent: () => Promise<string | null>;
 }
@@ -27,11 +27,14 @@ const StudentApi: StudentApi = {
       throw error;
     }
   },
-  findSingleStudent: async () => {
+  findSingleStudent: async (studentFirstName: string) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/student/id`, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.get(
+        `${API_BASE_URL}/api/student/${studentFirstName}`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       if (!response || response.status !== 200) {
         console.error("Data requested not found. Please try again.");
         return null;

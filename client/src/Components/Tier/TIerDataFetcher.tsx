@@ -8,16 +8,13 @@ export default function TierDataFetcher() {
   const [searchquery, setSearchQuery] = useState("");
   const [checkForData, setCheckForData] = useState(false);
 
-  const { tierAnchor_school, timeStart } = useParams();
-
   const fetchTierData = async () => {
     try {
-      if (searchquery === "tierAnchor_school") {
-        const response = await TierApi.findTierBySchool(tierAnchor_school!);
-        setSearchResults(response);
-      } else if (searchquery === "timerStart") {
-        const response = await TierApi.findTierByTime(timeStart);
-        setSearchResults(response);
+      if (searchquery.trim()) {
+        const response = await TierApi.findTierBySchoolOrRouteNumber(
+          searchquery!
+        );
+        setSearchResults([response]);
       } else {
         setSearchResults(null);
       }
@@ -25,17 +22,16 @@ export default function TierDataFetcher() {
       console.log("Error occured while fetching tier data.", error);
     }
   };
-  useEffect(() => {
-    fetchTierData();
-  }, [tierAnchor_school, timeStart, searchquery]);
 
   const handleSearchInput = (e: any) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleSubmitButton = (e: any) => {
+  const handleSubmitButton = async (e: any) => {
     e.preventDefault();
+    setSearchResults(null);
     setCheckForData(true);
+    await fetchTierData();
   };
 
   return (
@@ -50,21 +46,20 @@ export default function TierDataFetcher() {
             handleSearchInput(e);
           }}
         />
+        <button type="button" onClick={handleSubmitButton}>
+          Search
+        </button>
       </div>
-      <button type="button" onClick={handleSubmitButton}>
-        Search
-      </button>
 
       <div>
-        {checkForData && (!searchresults || searchresults.length === 0) && (
+        {checkForData && (!searchresults || searchresults.length === 0) ? (
           <p>No results found!</p>
-        )}
-
-        {searchresults && searchresults.length > 0 ? (
+        ) : searchresults && searchresults.length > 1 ? (
           <MultipleTiers multipleResults={searchresults} />
         ) : (
-          searchresults !== null && (
-            <SingleTierDetails singleTier={searchresults} />
+          searchresults &&
+          searchresults.length === 1 && (
+            <SingleTierDetails singleResult={searchresults} />
           )
         )}
       </div>

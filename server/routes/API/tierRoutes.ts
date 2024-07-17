@@ -8,8 +8,7 @@ import { Router } from "express";
 
 const router = Router();
 
-router.route("/tier").post(createTier);
-router.route("/tier/:routeNumber").get(findTierBySchoolOrRouteNumber);
+router.route("/tier").post(createTier).get(findTierBySchoolOrRouteNumber);
 router.route("/tier/:id").put(updateTier).delete(deleteRouteTier);
 
 export { router };

@@ -21,20 +21,24 @@ export function MultipleTiers({ multipleResults }: { multipleResults: any }) {
   );
 }
 
-export function SingleTierDetails({ singleTier }: { singleTier: any }) {
+export function SingleTierDetails({ singleResult }: { singleResult: any }) {
   return (
     <>
-      <div>Single Tier search result</div>
       <div>
-        <p>School Name: {singleTier.tierAnchor_school}</p>
-        <p>School Contact Number: {singleTier.schoolContactNumber}</p>
-        <p>Route Number: {singleTier.routeNumber}</p>
-        <p>Shift: {singleTier.shift}</p>
-        <p>Time Start: {singleTier.timeStart}</p>
-        <p>Time End: {singleTier.timeEnd}</p>
-        <p>Running days: {singleTier.runningDays}</p>
-        <p>Total Miles: {singleTier.totalMiles}</p>
-        <p>Route Description: {singleTier.routeDescription}</p>
+        <h1>Single Tier search result</h1>
+        {singleResult.map((singleTier: any) => (
+          <div key={singleTier.id}>
+            <p>School Name: {singleTier.tierAnchor_school}</p>
+            <p>School Contact Number: {singleTier.schoolContactNumber}</p>
+            <p>Route Number: {singleTier.routeNumber}</p>
+            <p>Shift: {singleTier.shift}</p>
+            <p>Time Start: {singleTier.timeStart}</p>
+            <p>Time End: {singleTier.timeEnd}</p>
+            <p>Running days: {singleTier.runningDays}</p>
+            <p>Total Miles: {singleTier.totalMiles}</p>
+            <p>Route Description: {singleTier.routeDescription}</p>
+          </div>
+        ))}
       </div>
     </>
   );

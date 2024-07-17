@@ -50,6 +50,14 @@ export default function Stop() {
         <h1>Address info</h1>
         <form onSubmit={handleSubmitForm}>
           <div>
+            <label>Tier id tied with:</label>
+            <input
+              type="text"
+              id="tier_id"
+              placeholder="tier/route id"
+              onChange={handleInputChange}
+            />
+
             <label>Pickup Address name:</label>
             <input
               type="text"

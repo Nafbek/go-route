@@ -4,7 +4,7 @@ const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:3001";
 interface StopApi {
   createStop: (data: any) => Promise<any[]>;
-  findStop: () => Promise<string | null>;
+  findStop: (stopAddress: any) => Promise<any[] | null>;
   updateStop: (data: string) => Promise<string | null>;
   deleteStop: () => Promise<string>;
 }
@@ -26,11 +26,15 @@ const StopApi: StopApi = {
     }
   },
 
-  findStop: async () => {
+  findStop: async (stopAddress: any) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/stop/id`, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const encodedStopAddress = encodeURIComponent(stopAddress);
+      const response = await axios.get(
+        `${API_BASE_URL}/api/stop/${encodedStopAddress}`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       if (!response || response.status !== 200) {
         console.error("Data requseted not found. Please try again.");
         return null;

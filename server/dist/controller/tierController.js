@@ -11,6 +11,7 @@ import { Student } from "../Models/StudentModels.js";
 import { Stop } from "../Models/StopModel.js";
 import { Tier } from "../Models/TierModel.js";
 import { Package } from "../Models/PackageModel.js";
+import { Op } from "sequelize";
 //Create a tier with all associations
 const createTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { tierAnchor_school, schoolContactNumber, packageId, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, routeDescription, } = req.body;
@@ -40,51 +41,38 @@ const createTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ message: "Server error. Try again!" });
     }
 });
-// const findTierByTime = async (req: Request, res: Response) => {
-//   try {
-//     const foundTierByTime = await Tier.findAndCountAll({
-//       where: { timeStart: req.params.timeStart },
-//       // include: [
-//       //   { model: Package },
-//       //   {
-//       //     model: Stop,
-//       //     as: "StopOnTier",
-//       //     include: [{ model: Student, as: "StudentAtStop" }],
-//       //   },
-//       // ],
-//     });
-//     if (!foundTierByTime) {
-//       return res.status(400).json({ message: "Data not found!" });
-//     }
-//     res.status(200).json(foundTierByTime);
-//   } catch (error) {
-//     console.error("Error occured while finding tier by time.");
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
 // Find route/tier by school or route number
 const findTierBySchoolOrRouteNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { routeNumber, tierAnchor_school } = req.params;
-    console.log("Route number is: ", routeNumber);
+    // const { routeNumber, tierAnchor_school, timeStart } = req.params;
+    const { query } = req.query;
+    console.log("Query is: ", query);
     try {
-        const foundTierBySchoolOrRouteNumber = yield Tier.findAndCountAll({
-            where: { routeNumber, tierAnchor_school },
-            include: [
-                { model: Package },
-                {
-                    model: Stop,
-                    as: "stops",
-                    include: [{ model: Student, as: "students" }],
+        if (query) {
+            const foundTierBySchoolOrRouteNumber = yield Tier.findAndCountAll({
+                where: {
+                    [Op.or]: [
+                        { routeNumber: query },
+                        { tierAnchor_school: query },
+                        { timeStart: query },
+                    ],
                 },
-            ],
-            // offset: 10,
-            // limit: 6,
-        });
-        if (!foundTierBySchoolOrRouteNumber ||
-            foundTierBySchoolOrRouteNumber.rows.length === 0) {
-            return res.status(400).json({ message: "Data not found!" });
+                include: [
+                    { model: Package },
+                    {
+                        model: Stop,
+                        as: "stops",
+                        include: [{ model: Student, as: "students" }],
+                    },
+                ],
+                // offset: 10,
+                // limit: 6,
+            });
+            if (!foundTierBySchoolOrRouteNumber ||
+                foundTierBySchoolOrRouteNumber.rows.length === 0) {
+                return res.status(400).json({ message: "Data not found!" });
+            }
+            res.status(200).json([foundTierBySchoolOrRouteNumber.rows]);
         }
-        res.status(200).json([foundTierBySchoolOrRouteNumber.rows]);
     }
     catch (error) {
         console.error("Error coccured while finding route/tier by school or route number.", error);
@@ -93,12 +81,12 @@ const findTierBySchoolOrRouteNumber = (req, res) => __awaiter(void 0, void 0, vo
 });
 // Update a single route/tier
 const updateTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tierAnchor_school, schoolContactNumber, package_id, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, } = req.body;
+    const { tierAnchor_school, schoolContactNumber, packageId, routeNumber, shift, timeStart, timeEnd, totalRiders, runningDays, totalMiles, routeDescription, } = req.body;
     try {
         const tierForupdate = yield Tier.update({
             tierAnchor_school,
             schoolContactNumber,
-            package_id,
+            packageId,
             routeNumber,
             shift,
             timeStart,
@@ -106,6 +94,7 @@ const updateTier = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             totalRiders,
             runningDays,
             totalMiles,
+            routeDescription,
         }, { where: { id: req.params.id } });
         if (!tierForupdate) {
             return res
