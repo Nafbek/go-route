@@ -16,6 +16,9 @@ export function DriverUI({ results }: { results: any }) {
   );
 }
 export function SingleDriverDetails({ driverDetails }: { driverDetails: any }) {
+  if (!driverDetails || !Array.isArray(driverDetails)) {
+    return <p>No Driver details found.</p>;
+  }
   return (
     <>
       <div>Single driver and all associated data </div>

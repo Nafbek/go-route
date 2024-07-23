@@ -10,43 +10,40 @@ export default function MainDriverFetchData() {
 
   const { driverFirstName, tierAnchor_school } = useParams();
 
-  const fetchData = async () => {
+  const fetchData = async (query: string = "") => {
     let response: any;
 
     try {
-      if (searchQuery.trim()) {
+      if (query.trim()) {
         // response = await MainDriverApi.findSingleDriver(driverFirstName);
 
-        response = await MainDriverApi.findOnlySingleDriverProfile(searchQuery);
+        response = await MainDriverApi.findOnlySingleDriverProfile(query);
         console.log("driver", response);
         setSearchResults(response ? [response] : []);
-      } else if (searchQuery.trim()) {
-        response = await MainDriverApi.findAllDriversBySchool(searchQuery);
-        setSearchResults(response);
-      } else {
-        setSearchResults(null);
       }
+      // else if (tierAnchor_school.trim()) {
+      //   response =
+      //     await MainDriverApi.findAllDriversBySchool(tierAnchor_school);
+      //   setSearchResults(response);
+      // }
+      else {
+        const response = await MainDriverApi.findAllDrivers();
+        setSearchResults(response);
+      }
+      setCheckForData(true);
     } catch (error) {
       console.error("Error occured while fetching data", error);
+      setSearchResults([]);
+      setCheckForData(true);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, [driverFirstName, tierAnchor_school]);
+    if (searchQuery.trim()) {
+      fetchData(searchQuery);
+    }
+  }, [searchQuery]);
 
-  // useEffect(() => {
-  //   try {
-  //     const response = await MainDriverApi.findOnlySingleDriverProfile(
-  //       driverFirstName!
-  //     );
-  //     if (!response) {
-  //       setSearchResults(response);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error occured while fetching data", error);
-  //   }
-  // }, []);
   const handleSearchInputChange = (e: any) => {
     setSearchQuery(e.target.value);
   };
@@ -54,23 +51,24 @@ export default function MainDriverFetchData() {
   const handleSearchButton = async (e: any) => {
     e.preventDefault();
     setSearchResults(null);
-    console.log("button clicked");
     setCheckForData(true);
 
-    await fetchData();
+    await fetchData(searchQuery);
   };
 
-  const fetchAllDriversList = async () => {
-    try {
-      const response = await MainDriverApi.findAllDrivers();
-      setSearchResults(response);
-    } catch (error) {
-      console.error("Error occured occured while fetching list of drivers");
-    }
-  };
+  // const fetchAllDriversList = async () => {
+  //   try {
+  //     const response = await MainDriverApi.findAllDrivers();
+  //     setSearchResults(response);
+  //   } catch (error) {
+  //     console.error("Error occured occured while fetching list of drivers");
+  //   }
+  // };
 
   const handleListOfDrivers = async (e: any) => {
-    await fetchAllDriversList();
+    e.preventDefault();
+    setSearchQuery("");
+    await fetchData();
   };
 
   return (
@@ -96,17 +94,16 @@ export default function MainDriverFetchData() {
           Now search all drivers
         </button>
       </div>
-
-      {checkForData && (!searchResults || searchResults.length === 0) && (
-        <p>No results found</p>
-      )}
-
-      {searchResults && searchResults.length > 0 ? (
-        <DriverUI results={searchResults} />
-      ) : (
-        searchResults !== null && (
+      {checkForData && searchResults && searchResults.length > 0 ? (
+        searchResults[0]?.Packages ? (
           <SingleDriverDetails driverDetails={searchResults} />
+        ) : (
+          <DriverUI results={searchResults} />
         )
+      ) : (
+        checkForData &&
+        searchResults &&
+        searchResults.length === 0 && <p>No results found</p>
       )}
     </>
   );
