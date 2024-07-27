@@ -9,7 +9,9 @@ interface MainDriverApi {
   findAllDrivers: () => Promise<any[] | null>;
   findAllDriversBySchool: (tierAnchor_school: string) => Promise<any[] | null>;
   findSingleMainDriver: (driverFirstName: string) => Promise<string | null>;
-  findOnlySingleDriverProfile: (driverFirstName: string) => Promise<string | null>;
+  findOnlySingleDriverProfile: (
+    driverFirstName: string
+  ) => Promise<string | null>;
   updateDriver: (data: any) => Promise<string[] | null>;
   deleteSingleDriver: (driverName: string) => Promise<string>;
 }
@@ -55,7 +57,7 @@ const MainDriverApi: MainDriverApi = {
   findSingleMainDriver: async (driverFirstName: string) => {
     try {
       const response: AxiosResponse<string> = await axios.get(
-        `${API_BASE_URL}/api/driver/details${driverFirstName}`,
+        `${API_BASE_URL}/api/driver/details/${driverFirstName}`,
         {
           headers: {
             "Content-Type": "application/json",

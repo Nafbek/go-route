@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { DriverUI, SingleDriverDetails } from "./MainDriverUI";
 
 export default function MainDriverFetchData() {
-  const [searchResults, setSearchResults] = useState<any[] | null>();
+  const [searchResults, setSearchResults] = useState<any[] | null>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [checkForData, setCheckForData] = useState(false);
 
-  const { driverFirstName, tierAnchor_school } = useParams();
+  // const { driverFirstName, tierAnchor_school } = useParams();
 
   const fetchData = async (query: string = "") => {
     let response: any;
@@ -17,9 +17,10 @@ export default function MainDriverFetchData() {
       if (query.trim()) {
         // response = await MainDriverApi.findSingleDriver(driverFirstName);
 
-        response = await MainDriverApi.findOnlySingleDriverProfile(query);
-        console.log("driver", response);
+        response = await MainDriverApi.findSingleMainDriver(query);
+        console.log("driver details: ", response);
         setSearchResults(response ? [response] : []);
+        console.log("search results: ", response ? [response] : []);
       }
       // else if (tierAnchor_school.trim()) {
       //   response =
@@ -29,6 +30,7 @@ export default function MainDriverFetchData() {
       else {
         const response = await MainDriverApi.findAllDrivers();
         setSearchResults(response);
+        console.log("searchresults: ", response);
       }
       setCheckForData(true);
     } catch (error) {
@@ -42,7 +44,7 @@ export default function MainDriverFetchData() {
     if (searchQuery.trim()) {
       fetchData(searchQuery);
     }
-  }, [searchQuery]);
+  }, []);
 
   const handleSearchInputChange = (e: any) => {
     setSearchQuery(e.target.value);
@@ -95,16 +97,14 @@ export default function MainDriverFetchData() {
         </button>
       </div>
       {checkForData && searchResults && searchResults.length > 0 ? (
-        searchResults[0]?.Packages ? (
-          <SingleDriverDetails driverDetails={searchResults} />
+        searchResults.length === 1 ? (
+          <SingleDriverDetails driverDetails={searchResults[0]} />
         ) : (
           <DriverUI results={searchResults} />
         )
-      ) : (
-        checkForData &&
-        searchResults &&
-        searchResults.length === 0 && <p>No results found</p>
-      )}
+      ) : checkForData ? (
+        <p>No Result found</p>
+      ) : null}
     </>
   );
 }

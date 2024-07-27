@@ -37,7 +37,7 @@ function App() {
           <Route path="/stop" element={<Stop />} />
           <Route path="/student" element={<Student />} />
 
-          <Route path="/driver/results" element={<MainDriverFetchData />} />
+          <Route path="/driver/details" element={<MainDriverFetchData />} />
           <Route path="/driver" element={<MainDriverForm />} />
 
           <Route path="/dashboard" element={<Dashboard />} />

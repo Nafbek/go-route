@@ -17,7 +17,7 @@ export function SinglePackageDetails({ details }: { details: any }) {
             <p>Package Number: {pkg.packageNumber}</p>
             <p>Package Description: {pkg.packageDescription}</p>
             <h2>Tiers/routes: </h2>
-            {pkg.Tiers?.map((tier: any) => (
+            {pkg.tiers?.map((tier: any) => (
               <div key={tier.id}>
                 <p>School Name: {tier.tierAnchor_school}</p>
                 <p>School Contact Number: {tier.schoolContactNumber}</p>
@@ -28,10 +28,10 @@ export function SinglePackageDetails({ details }: { details: any }) {
                 <p>Running days: {tier.runningDays}</p>
                 <p>Total Miles: {tier.totalMiles}</p>
                 <p>Route Description: {tier.routeDescription}</p>
-                {tier.Stops && tier.Stops.length > 0 && (
+                {tier.stops && tier.stops.length > 0 && (
                   <div>
-                    <h2>Stops: </h2>
-                    {tier.Stops?.map((stop: any) => (
+                    <h2>stops: </h2>
+                    {tier.stops?.map((stop: any) => (
                       <div key={stop.id}>
                         <p>Stop Name: {stop.stopName}</p>
                         <p>Stop Address: {stop.stopAddress}</p>
@@ -39,10 +39,10 @@ export function SinglePackageDetails({ details }: { details: any }) {
                         <p>Dropoff time at school: {stop.dropoffTime_school}</p>
                         <p>Dropoff time at home: {stop.dropoffTime_home}</p>
                         <p>Pickup time from school: {stop.pickupTime_school}</p>
-                        {stop.Students && stop.Students.length > 0 && (
+                        {stop.students && stop.students.length > 0 && (
                           <div>
-                            <h2>Students: </h2>
-                            {stop.Students.map((student: any) => (
+                            <h2>students: </h2>
+                            {stop.students.map((student: any) => (
                               <div key={student.id}>
                                 <p>First Name: {student.studentFirstName}</p>
                                 <p>Last Name: {student.studentLastName}</p>
